@@ -4,6 +4,7 @@ import {
     AccountScreen,
     BookmarkScreen,
   CartScreen,
+  GoogleMapScreen,
   HomeScreen,
   LoadingStartScreen,
   OrderScreen,
@@ -34,7 +35,6 @@ return (
         height: Display.setHeight(8),
         backgroundColor: Colors.DEFAULT_WHITE,
         borderTopWidth: 0,
-        
         zIndex:isLoadingStart
       },
       tabBarShowLabel: false,
@@ -44,6 +44,15 @@ return (
     <BottomTabsN.Screen
       name="HomeScreen"
       component={HomeScreen}
+      options={{
+        tabBarIcon: ({color}) => (
+          <Ionicons name="home-outline" size={23} color={color} />
+        ),
+      }}
+    />
+     <BottomTabsN.Screen
+      name="GoogleMapScreen"
+      component={GoogleMapScreen}
       options={{
         tabBarIcon: ({color}) => (
           <Ionicons name="home-outline" size={23} color={color} />

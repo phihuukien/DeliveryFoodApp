@@ -18,6 +18,7 @@ import HistoryOrderScreen from './HistoryOrderScreen';
 import LoadingStartScreen from './LoadingStartScreen';
 import SuccessOrder from './SuccessOrder';
 import ResultSreach  from './ResultSreach';
+import GoogleMapScreen from './GoogleMapScreen';
 export {
     SplashScreen,
     WelcomeScreen,
@@ -38,6 +39,7 @@ export {
     HistoryOrderScreen,
     LoadingStartScreen,
     SuccessOrder,
-    ResultSreach
+    ResultSreach,
+    GoogleMapScreen
 
 };

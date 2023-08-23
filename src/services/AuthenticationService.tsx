@@ -46,8 +46,8 @@ const login = async (user: any) => {
         );
         return registerResponse?.data;
 
-    } catch (error) {
-        console.log(error);
+    } catch (error:any) {
+        console.log(error.data);
         return { value: { status: false, message: 'Oops! Something went wrong' } };
     }
 };

@@ -19,7 +19,7 @@ const OrderScreen = ({ navigation }: any) => {
     <View style={styles.container}>
       <StatusBar
         barStyle="dark-content"
-        backgroundColor={Colors.DEFAULT_WHITE}
+        backgroundColor={Colors.DEFAULT_GREEN}
         translucent
       />
       <Separator height={StatusBar.currentHeight} />
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   foodList: {
-    marginHorizontal: 7,
+    marginHorizontal: 70,
   },
   emptyCartContainer: {
     flex: 1,
