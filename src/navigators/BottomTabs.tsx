@@ -50,15 +50,7 @@ return (
         ),
       }}
     />
-     <BottomTabsN.Screen
-      name="GoogleMapScreen"
-      component={GoogleMapScreen}
-      options={{
-        tabBarIcon: ({color}) => (
-          <Ionicons name="home-outline" size={23} color={color} />
-        ),
-      }}
-    />
+     
     <BottomTabsN.Screen
       name="BookmarkScreen"
       component={BookmarkScreen}

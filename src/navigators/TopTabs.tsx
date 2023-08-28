@@ -13,7 +13,7 @@ export default ()=> {
     screenOptions={{
       tabBarStyle: {
         position:'relative',
-        top:40,
+        top:20,
       },
       tabBarIndicatorStyle: {backgroundColor: Colors.DEFAULT_GREEN},
       tabBarPressColor:'white',

@@ -7,6 +7,7 @@ import {
   ScrollView,
   FlatList,
   TouchableOpacity,
+  TextInput,
 } from 'react-native';
 import {
   CategoryMenuItem,
@@ -79,15 +80,20 @@ const HomeScreen = ({ navigation }: any) => {
                 <Text style={styles.alertBadgeText}>12</Text>
               </View>
             </View>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("Search")}
+              >
             <View style={styles.searchContainer}>
+             
               <View style={styles.searchSection}>
                 <Ionicons
                   name="search-outline"
                   size={25}
                   color={Colors.DEFAULT_GREY}
                 />
-                <Text style={styles.searchText}>Search..</Text>
+                <Text style={styles.searchText} >Search..</Text>
               </View>
+             
               <Feather
                 name="sliders"
                 size={20}
@@ -95,6 +101,7 @@ const HomeScreen = ({ navigation }: any) => {
                 style={{ marginRight: 10 }}
               />
             </View>
+            </TouchableOpacity>
             <View style={styles.categoriesContainer}>
               {Mock.CATEGORIES.map(({ name, logo }) => (
                 <CategoryMenuItem
@@ -262,7 +269,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   listContainer: {
-    paddingVertical: 5,
+    paddingVertical: 26,
     zIndex: -5,
   },
   horizontalListContainer: {

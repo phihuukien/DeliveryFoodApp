@@ -6,4 +6,6 @@ import CartService  from "./CartService";
 import BookmarkService from "./BookmarkService";
 import UserService from "./UserService";
 import OrderService from "./OrderService";
-export {StorageService,StaticImageService,AuthenticationService,RestaurantsService,CartService,BookmarkService,UserService,OrderService};
+import SearchService from "./SearchService";
+
+export {SearchService,StorageService,StaticImageService,AuthenticationService,RestaurantsService,CartService,BookmarkService,UserService,OrderService};
