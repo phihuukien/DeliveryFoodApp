@@ -25,6 +25,7 @@ import { BookmarkAction, CartAction, GeneralAction } from "../actions";
 import { AnyAction } from "redux";
 import HomeTabs from './BottomTabs';
 import OrderTabs from './TopTabs';
+import DetailOrderTrackingScreen from "../screens/DetailOrderTrackingScreen";
 const Stack = createNativeStackNavigator();
 
 const Navigators = () => {
@@ -65,6 +66,7 @@ const Navigators = () => {
             <Stack.Screen name="CheckoutScreen" component={CheckoutScreen} />
             <Stack.Screen name="CartScreen" component={CartScreen} />
             <Stack.Screen name="SuccessOrder" component={SuccessOrder} />
+            <Stack.Screen name="DetailOrderTrackingScreen" component={DetailOrderTrackingScreen} />
           </>
         )}
       </Stack.Navigator>

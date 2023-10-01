@@ -23,7 +23,6 @@ import OrderAction from '../actions/OrderAction';
 const CheckoutScreen = ({ route, navigation }: any) => {
   const dispatch = useDispatch<any>();
   const { restaurantId ,grandTotal,itemTotal} = route.params;
-  console.log(restaurantId ,grandTotal)
   const cart = useSelector((state: any) => state?.cartState?.cartDetail);
   
   const userData = useSelector(

@@ -3,13 +3,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {
     AccountScreen,
     BookmarkScreen,
-  CartScreen,
-  GoogleMapScreen,
   HomeScreen,
-  LoadingStartScreen,
-  OrderScreen,
-  ResultSreach,
-  SuccessOrder,
 } from '../screens';
 import OrderTabs from './TopTabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -44,15 +38,6 @@ return (
     <BottomTabsN.Screen
       name="HomeScreen"
       component={HomeScreen}
-      options={{
-        tabBarIcon: ({color}) => (
-          <Ionicons name="home-outline" size={23} color={color} />
-        ),
-      }}
-    />
-     <BottomTabsN.Screen
-      name="GoogleMapScreen"
-      component={GoogleMapScreen}
       options={{
         tabBarIcon: ({color}) => (
           <Ionicons name="home-outline" size={23} color={color} />

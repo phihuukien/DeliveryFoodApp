@@ -34,7 +34,6 @@ const addOrder = async (order:any) => {
       };
     }
   };
-
   const getOrderComing = async () => {
     console.log(`OrderService | getOrderComing`);
     try {
@@ -97,4 +96,30 @@ const addOrder = async (order:any) => {
       };
     }
   };
-export default {addOrder,getOrderComing,getOrderHistory}; 
+  const getOrderDetail = async (orderId:string) => {
+    console.log(`OrderService | getOrderDetail`);
+    try {
+      let response = await axios.get(
+        `${ApiContants.BACKEND_API.BASE_API_URL}${ApiContants.BACKEND_API.GETORDERDETAIL}`+orderId
+      );
+      if (response?.data.status) {
+        return {
+          status: true,
+          message: `order data fetched`,
+          data: response?.data?.data,
+          orderDetail:response?.data.dataOrderDetail,
+        };
+      } else {
+        return {
+          status: false,
+          message: `order data not found`,
+        };
+      }
+    } catch (error) {
+      return {
+        status: false,
+        message: `order data not found`,
+      };
+    }
+  };
+export default {addOrder,getOrderComing,getOrderHistory,getOrderDetail}; 

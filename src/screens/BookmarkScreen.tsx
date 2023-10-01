@@ -20,6 +20,7 @@ const ListItemSeparator = () => (
 const BookmarkScreen = ({navigation}:any) => {
   
   const bookmarks = useSelector((state:any) => state?.bookmarkState?.bookmarks);
+  
 
   return (
     <View style={styles.container}>

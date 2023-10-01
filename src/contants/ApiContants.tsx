@@ -20,6 +20,7 @@ const BACKEND_API = {
   ADDORDER: '/orders/add',
   GETORDERCOMING: '/orders/getordercoming',
   GETORDERHISTORY: '/orders/getorderhistory',
+  GETORDERDETAIL: '/orders/get-order-detail/'
 
 }  
 const STATIC_IMAGE = {

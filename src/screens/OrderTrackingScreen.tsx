@@ -5,7 +5,11 @@ import {
     StyleSheet,
     ScrollView,
     StatusBar,
-    Image
+    Image,
+    Modal,
+    Alert,
+    Pressable,
+    TextInput
 } from 'react-native';
 
 import { Colors, Fonts, Images } from '../contants';
@@ -14,11 +18,34 @@ import { OrderService } from '../services';
 import { Display } from '../utils';
 import { useDispatch, useSelector } from 'react-redux';
 import OrderAction from '../actions/OrderAction';
+import { HubConnectionBuilder } from '@microsoft/signalr';
 
-const OrderTrackingScreen = () => {
+const OrderTrackingScreen = ({ navigation }: any) => {
+    const [cancelReason, setcancelReason] = useState('');
     const dispatch = useDispatch<any>();
+    const [modalVisible, setModalVisible] = useState(false);
     useEffect(() => {
         dispatch(OrderAction.getOrderComing());
+        const connection = new HubConnectionBuilder()
+            .withUrl('http://192.168.1.23:7090/chatHub')
+            .build();
+        connection.on('SendStutusToMobileForShipper', (message) => {
+            dispatch(OrderAction.getOrderHistory());
+            dispatch(OrderAction.getOrderComing());
+
+        });
+
+        connection.start()
+            .then(() => {
+                console.log('Connected to hub.');
+            })
+            .catch((error) => {
+                console.log('Error connecting to hub:', error);
+            });
+        return () => {
+            connection.stop();
+        };
+
     }, [])
     const orderComming = useSelector((state: any) => state?.orderState?.orderComming);
     return (
@@ -29,17 +56,59 @@ const OrderTrackingScreen = () => {
                 translucent
             />
             <Separator height={StatusBar.currentHeight} />
-            {orderComming.length>0 ? (
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    Alert.alert('Modal has been closed.');
+                    setModalVisible(!modalVisible);
+                }}>
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalText}>cancellation reason!</Text>
+
+                        <TextInput
+                            placeholder="reason"
+                            placeholderTextColor={Colors.DEFAULT_GREY}
+                            selectionColor={Colors.DEFAULT_GREY}
+                            style={{
+                                borderWidth: 1, padding: 3, borderRadius: 3,
+                                borderColor: Colors.DEFAULT_GREY,
+                            }}
+                            onChangeText={text => setcancelReason(text)}
+                        />
+                        <View style={{ flexDirection: 'row' , marginTop:10}}>
+                            <Pressable
+                                style={[styles.button, styles.buttonClose]}
+                                onPress={() => setModalVisible(!modalVisible)}>
+                                <Text style={styles.textStyle}>Exits</Text>
+                            </Pressable>
+                            <Pressable
+                                style={[styles.button, styles.buttonCancel]}
+                                onPress={() => setModalVisible(!modalVisible)}>
+                                <Text style={styles.textStyle}>confirm cancel</Text>
+                            </Pressable>
+
+                        </View>
+
+                    </View>
+                </View>
+            </Modal>
+            {orderComming.length > 0 ? (
                 <>
                     <ScrollView showsVerticalScrollIndicator={false}>
                         <View style={styles.foodList}>
-                        {orderComming?.map((item: any) => (
-                            <OrderComingCard 
-                            {...item}
-                            restaurant={item.restaurant[0]}
-                            key={item.id}
-                            />
-                        ))}
+                            {orderComming?.map((item: any) => (
+                                <OrderComingCard
+                                    {...item}
+                                    restaurant={item.restaurant[0]}
+                                    navigate={navigation}
+                                    setModalVisible={setModalVisible}
+                                    key={item.id}
+                                />
+                            ))}
                         </View>
                     </ScrollView>
                 </>) : (
@@ -58,11 +127,54 @@ const OrderTrackingScreen = () => {
                     </View>
                 </>
             )}
-               <Separator height={60} />
+            <Separator height={60} />
         </View>
     )
 }
 const styles = StyleSheet.create({
+    buttonClose: {
+        backgroundColor: Colors.DEFAULT_GREEN,
+    },
+    buttonCancel: {
+        backgroundColor: Colors.DEFAULT_RED,
+        marginLeft:20
+    },
+    textStyle: {
+        color: 'white',
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    modalText: {
+        marginBottom: 15,
+        textAlign: 'center',
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding: 35,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    button: {
+        borderRadius: 10,
+        padding: 10,
+        elevation: 2,
+    },
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 22,
+        backgroundColor: 'rgba(52, 52, 52, 0.8)'
+    },
     container: {
         flex: 1,
     },

@@ -3,19 +3,22 @@ import { Colors, Fonts } from "../contants";
 import { Display } from "../utils";
 import { StaticImageService } from "../services";
 import moment from 'moment';
-const OrderComingCard = ({quantity,paymentMothod,status,priceTotal,dateCreated,restaurant}:any) => {
+const OrderComingCard = ({setModalVisible, id,quantity,orderCode, paymentMothod, deliveringStatus, priceTotal, dateCreated, restaurant ,navigate}: any) => {
   const dataFormat = moment(dateCreated).format('YYYY/MM/DD -- hh:mm:ss a');
   return (
     <View style={styles.container}>
       <View style={styles.textDate}>
+      <Text>{orderCode} </Text>
+        <Text style={{ marginLeft: 10, marginRight: 10, color: Colors.DEFAULT_GREEN }}>||</Text>
         <Text>{dataFormat}</Text>
 
       </View>
       <View style={styles.subcontainer}>
-        <TouchableOpacity activeOpacity={0.8} >
+        <TouchableOpacity activeOpacity={0.8} 
+        onPress={()=> navigate.navigate("DetailOrderTrackingScreen",{orderId:id})}>
           <Image
             style={styles.image}
-            source={{uri: StaticImageService.getPoster(restaurant.images.poster)}}
+            source={{ uri: StaticImageService.getPoster(restaurant.images.poster) }}
           />
         </TouchableOpacity>
         <View style={styles.detailsContainer}>
@@ -24,34 +27,43 @@ const OrderComingCard = ({quantity,paymentMothod,status,priceTotal,dateCreated,r
               {restaurant.name}
             </Text>
             <Text numberOfLines={2} style={styles.descriptionText}>
-              {paymentMothod === 1 ? "cash":"visa"}
+              {paymentMothod === 1 ? "Payment on delivered" : "Prepayment"}
             </Text>
           </TouchableOpacity>
           <View style={styles.footerContainer}>
             <Text style={styles.priceText}>$ {priceTotal} ( {quantity} mon)</Text>
+            {deliveringStatus == 1 || deliveringStatus == 2 || deliveringStatus == 3?
+             <TouchableOpacity activeOpacity={0.8} 
+             onPress={() => setModalVisible(true)}
+             style={{backgroundColor:Colors.DEFAULT_RED, paddingHorizontal:10,paddingVertical:3,borderRadius:5}} >
+            <Text style={{color:Colors.DEFAULT_WHITE}}>Cancel</Text>
+            </TouchableOpacity>
+            :
+            <></>}
+           
           </View>
         </View>
       </View>
       <View style={styles.statusFooter}>
         <View>
-        <Text>Ordered </Text>
+          <Text>Ordered </Text>
         </View>
         <View>
-        <Text>
-          {( () => {
-            switch(status){
-              case 1:
-                return "Looking for a driver"
-              case 2: 
-                return "The driver is accepting orders"
-                case 3: 
-              return "The driver is delivering"
-              case 4:
-                return "Finish"
-              default:
-                return "Cancelled"
-            }
-          })()}
+          <Text style={{color:Colors.DEFAULT_GREEN}}>
+            {(() => {
+              switch (deliveringStatus) {
+                case 1:
+                  return "Looking for a driver"
+                case 2:
+                  return "The driver has been found"
+                case 3:
+                  return "Order Processing"
+                case 4:
+                  return "On Thy Way"
+                  case 5:
+                    return "Deliverred"
+              }
+            })()}
           </Text>
         </View>
       </View>
@@ -67,18 +79,17 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.LIGHT_GREY,
   },
   textDate: {
-    alignSelf: 'flex-end',
-    marginRight: 15,
-    marginVertical: 7,
-   
-  },
-  statusFooter:{
-    width:'94%',
     flexDirection: 'row',
-    justifyContent:'space-between',
-    marginVertical:4
+    justifyContent: 'space-between',
+
   },
-  textFooter:{
+  statusFooter: {
+    width: '94%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: 4
+  },
+  textFooter: {
 
   },
   subcontainer: {
