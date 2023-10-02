@@ -24,6 +24,7 @@ import { RestaurantsService } from '../services';
 import LoadingStartScreen from './LoadingStartScreen';
 import { useDispatch } from 'react-redux';
 import { BookmarkAction, GeneralAction } from '../actions';
+import TagService from '../services/TagService';
 
 const sortStyle = (isActive: boolean) =>
   isActive
@@ -35,7 +36,7 @@ const HomeScreen = ({ navigation }: any) => {
   const [activeCategory, setActiveCategory] = useState();
   const [restaurants, setRestaurants] = useState<any[]>();
   const [activeSortItem, setActiveSortItem] = useState('recent');
-
+  const [tags, setTags] = useState<any>();
   useEffect(() => {
     RestaurantsService.getRestaurants().then(response => {
       if (response.status) {
@@ -43,7 +44,12 @@ const HomeScreen = ({ navigation }: any) => {
         dispatch(GeneralAction.setIsAppLoadingStart(100));
         dispatch(BookmarkAction.getBookmarks());
       }
-    });;
+    });
+    TagService.getAllTags().then((response: any) => {
+      console.log(`tagg`, response);
+      setTags(response.data)
+    })
+
 
   }, []);
 
@@ -96,13 +102,15 @@ const HomeScreen = ({ navigation }: any) => {
               />
             </View>
             <View style={styles.categoriesContainer}>
-              {Mock.CATEGORIES.map(({ name, logo }) => (
+              {tags?.map((item: any) => (
                 <CategoryMenuItem
-                  key={name}
-                  name={name}
-                  logo={logo}
+                  {...item}
+                  key={item.id}
                   activeCategory={activeCategory}
                   setActiveCategory={setActiveCategory}
+                  navigate={() =>
+                    navigation.navigate("RestaurantsByTag",{ tagName: item?.name })
+                  }
                 />
               ))}
             </View>
@@ -124,9 +132,7 @@ const HomeScreen = ({ navigation }: any) => {
                 renderItem={({ item }: any) => (
                   <RestaurantCard
                     {...item}
-                    navigate={(restaurantId: any) =>
-                      navigation.navigate('RestaurantScreen', { restaurantId: restaurantId })
-                    }
+                    navigate={navigation}
                   />
                 )}
               />

@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         backgroundColor: Colors.DEFAULT_WHITE,
         marginTop: 8,
-      },
+    },
     posterStyle: {
         width: Display.setWidth(20),
         height: Display.setWidth(20),

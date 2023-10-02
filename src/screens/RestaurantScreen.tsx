@@ -58,10 +58,11 @@ const ListFooter = () => (
 
 
 const RestaurantScreen = ({ route, navigation }: any) => {
-  const { restaurantId } = route.params;
+  const { restaurantId, rate, review } = route.params;
   const [restaurant, setRestaurant] = useState<any>();
   const [selectedCategory, setSelectedCategory] = useState(null);
   const dispatch = useDispatch<any>();
+
 
   // const cart = useSelector((state: any) => state?.cartState?.cart);
   const itemCount = useSelector(
@@ -125,8 +126,13 @@ const RestaurantScreen = ({ route, navigation }: any) => {
                 size={18}
                 color={Colors.DEFAULT_YELLOW}
               />
-              <Text style={styles.ratingText}>4.2</Text>
-              <Text style={styles.reviewsText}>(455 Reviews)</Text>
+              <Text style={styles.ratingText}>{rate.toFixed(1)}</Text>
+              {review > 2 ?
+                <Text style={styles.reviewsText}>(2+ Reviews)</Text>
+                :
+                <Text style={styles.reviewsText}>({review} Reviews)</Text>
+              }
+              {/* <Text style={styles.reviewsText}>({review} Reviews)</Text> */}
             </View>
             <View style={styles.deliveryDetailsContainer}>
               <View style={styles.rowAndCenter}>
@@ -201,7 +207,7 @@ const RestaurantScreen = ({ route, navigation }: any) => {
           <View style={styles.buttonsContainer}>
             <TouchableOpacity
               style={styles.cartButton}
-              onPress={() => navigation.navigate('CartScreen',{restaurantId:restaurantId})}
+              onPress={() => navigation.navigate('CartScreen', { restaurantId: restaurantId })}
               activeOpacity={0.8}>
               <Ionicons name="cart" size={30}
                 style={{ color: 'white' }}

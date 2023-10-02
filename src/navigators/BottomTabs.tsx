@@ -9,6 +9,7 @@ import {
   LoadingStartScreen,
   OrderScreen,
   ResultSreach,
+  ReviewScreen,
   SuccessOrder,
 } from '../screens';
 import OrderTabs from './TopTabs';
@@ -50,15 +51,15 @@ return (
         ),
       }}
     />
-     <BottomTabsN.Screen
-      name="GoogleMapScreen"
-      component={GoogleMapScreen}
+     {/* <BottomTabsN.Screen
+      name="Review"
+      component={ReviewScreen}
       options={{
         tabBarIcon: ({color}) => (
           <Ionicons name="home-outline" size={23} color={color} />
         ),
       }}
-    />
+    /> */}
     <BottomTabsN.Screen
       name="BookmarkScreen"
       component={BookmarkScreen}

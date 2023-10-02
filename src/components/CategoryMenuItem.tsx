@@ -1,37 +1,40 @@
-import React from 'react';
-import {Text, StyleSheet, TouchableOpacity, Image, } from 'react-native';
-import {Colors, Fonts, Images} from '../contants';
+import React, { useEffect, useState } from 'react';
+import { Text, StyleSheet, TouchableOpacity, Image, } from 'react-native';
+import { Colors, Fonts, Images } from '../contants';
+import TagService from '../services/TagService';
+import { StaticImageService } from '../services';
 
-const CategoryMenuItem = ({name, logo, activeCategory, setActiveCategory}:any) => {
+const CategoryMenuItem = ({ name, image, activeCategory, setActiveCategory, navigate }: any) => {
   return (
     <TouchableOpacity
-    onPress={() => setActiveCategory(name)}
-    style={styles.category}>
+      // onPress={() => setActiveCategory(name)}
+      onPress={() => navigate()}
+      style={styles.category}>
       <Image
-        source={Images[logo as keyof typeof Images]}
-        style={[styles.categoryIcon, {opacity: activeCategory === name ? 1 : 0.5}]}/>
-        
-       <Text style={[styles.categoryText,{ opacity: activeCategory === name ? 1 : 0.5}]}>{name}</Text>
+        source={{ uri: StaticImageService.getLogoTag(image) }}
+        style={[styles.categoryIcon, { opacity: activeCategory === name ? 1 : 0.5 }]} />
+
+      <Text style={[styles.categoryText, { opacity: activeCategory === name ? 1 : 0.5 }]}>{name}</Text>
     </TouchableOpacity>
   );
 };
 const styles = StyleSheet.create({
-  category : {
+  category: {
     alignItems: 'center',
-    marginTop:0,
+    marginTop: 0,
   },
-  categoryIcon:{
+  categoryIcon: {
     height: 30,
     width: 30,
-   
+
   },
-  categoryText:{
+  categoryText: {
     fontSize: 10,
     lineHeight: 10 * 1.4,
     fontFamily: Fonts.POPPINS_MEDIUM,
     color: Colors.DEFAULT_WHITE,
     marginTop: 5,
-   
+
   },
 });
 

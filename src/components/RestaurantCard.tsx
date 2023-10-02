@@ -1,37 +1,45 @@
-import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
-import {Colors, Fonts} from '../contants';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { Colors, Fonts } from '../contants';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {StaticImageService} from '../services';
-import {useDispatch, useSelector} from 'react-redux';
+import { StaticImageService } from '../services';
+import { useDispatch, useSelector } from 'react-redux';
 import { BookmarkAction } from '../actions';
+import ReviewService from '../services/ReviewService';
 
 const RestaurantCard = ({
   id,
   name,
-  images: {poster},
+  images: { poster },
   tags,
   distance,
   times,
   navigate,
-}:any) => {
+}: any) => {
   const dispatch = useDispatch<any>();
   const isBookmarked = useSelector(
-    (state:any) =>
-      state?.bookmarkState?.bookmarks?.filter((item:any) => item?.restaurantId === id)
+    (state: any) =>
+      state?.bookmarkState?.bookmarks?.filter((item: any) => item?.restaurantId === id)
         ?.length > 0,
   );
+  const [rating, setRating] = useState(0);
+  const [ratedOrder, setRatedOrder] = useState(Number);
+  ReviewService.getRatingRestaurant(id).then((response: any) => {
+    setRating(response.avgRating);
+    setRatedOrder(response.totalOrderRated);
+  })
+
   const addBookmark = () =>
-    dispatch(BookmarkAction.addBookmark({restaurantId: id}));
+    dispatch(BookmarkAction.addBookmark({ restaurantId: id }));
   const removeBookmark = () =>
-    dispatch(BookmarkAction.removeBookmark({restaurantId: id}));
-  
+    dispatch(BookmarkAction.removeBookmark({ restaurantId: id }));
+
   return (
     <TouchableOpacity
       style={styles.container}
       activeOpacity={0.8}
-      onPress={() => navigate(id)}>
+      onPress={() => navigate.navigate('RestaurantScreen', { restaurantId: id, rate: rating, review: ratedOrder })}>
       <Ionicons
         color={Colors.DEFAULT_YELLOW}
         size={24}
@@ -40,7 +48,7 @@ const RestaurantCard = ({
         onPress={() => (isBookmarked ? removeBookmark() : addBookmark())}
       />
       <Image
-        source={{uri: StaticImageService.getPoster(poster)}}
+        source={{ uri: StaticImageService.getPoster(poster) }}
         style={styles.posterStyle}
       />
       <Text style={styles.titleText}>{name}</Text>
@@ -48,8 +56,13 @@ const RestaurantCard = ({
       <View style={styles.footerContainer}>
         <View style={styles.rowAndCenter}>
           <FontAwesome name="star" size={14} color={Colors.DEFAULT_YELLOW} />
-          <Text style={styles.ratingText}>4</Text>
-          <Text style={styles.reviewsText}>({10})</Text>
+          <Text style={styles.ratingText}>{rating.toFixed(1)} </Text>
+          {ratedOrder > 2 ?
+            <Text style={styles.reviewsText}>(2+)</Text>
+            :
+            <Text style={styles.reviewsText}>({ratedOrder})</Text>
+          }
+
         </View>
         <View style={styles.rowAndCenter}>
           <View style={styles.timeAndDistanceContainer}>

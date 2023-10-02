@@ -20,7 +20,12 @@ const BACKEND_API = {
   ADDORDER: '/orders/add',
   GETORDERCOMING: '/orders/getordercoming',
   GETORDERHISTORY: '/orders/getorderhistory',
-
+  ADDREVIEW:'/reviews/add',
+  GETREVIEW:'/reviews/get/',
+  GETREVIEWITEM:'/reviews/item/',
+  GETRATING:'/reviews/rating/',
+  GETALLTAGS:'/tags/getAll',
+  GETRESTAURANTBYTAG:'/restaurants/tag/'
 }  
 const STATIC_IMAGE = {
   BASE_URL: `${BACKEND_BASE_URL_IMG}`,

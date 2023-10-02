@@ -13,6 +13,7 @@ import {
   LoadingStartScreen,
   RegisterPhoneScreen,
   RestaurantScreen,
+  RestaurantsByTagScreen,
   SigninScreen,
   SignupScreen,
   SplashScreen,
@@ -25,6 +26,8 @@ import { BookmarkAction, CartAction, GeneralAction } from "../actions";
 import { AnyAction } from "redux";
 import HomeTabs from './BottomTabs';
 import OrderTabs from './TopTabs';
+import ReviewScreen from "../screens/ReviewScreen";
+import ReviewActionScreen from "../screens/ReviewActionScreen";
 const Stack = createNativeStackNavigator();
 
 const Navigators = () => {
@@ -65,6 +68,9 @@ const Navigators = () => {
             <Stack.Screen name="CheckoutScreen" component={CheckoutScreen} />
             <Stack.Screen name="CartScreen" component={CartScreen} />
             <Stack.Screen name="SuccessOrder" component={SuccessOrder} />
+            <Stack.Screen name="Review" component={ReviewScreen} />
+            <Stack.Screen name="ReviewAction" component={ReviewActionScreen} />
+            <Stack.Screen name="RestaurantsByTag" component={RestaurantsByTagScreen} />
           </>
         )}
       </Stack.Navigator>

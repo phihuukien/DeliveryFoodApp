@@ -18,6 +18,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import FoodService from '../services/FoodService';
 import { CartAction } from '../actions';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import ReviewService from '../services/ReviewService';
+import moment from 'moment';
 
 const setStyle = (isActive: boolean) =>
   isActive
@@ -27,7 +29,13 @@ const setStyle = (isActive: boolean) =>
 const FoodScreen = ({ route, navigation }: any) => {
   const { foodId } = route.params
   const [food, setFood] = useState<any>(null);
-  const [selectedSubMenu, setSelectedSubMenu] = useState('Details');
+  const [selectedSubMenu, setSelectedSubMenu] = useState<string>('Details');
+  const [reviews, setReviews] = useState<any>();
+
+
+  const starImgFilled = 'https://github.com/tranhonghan/images/blob/main/star_filled.png?raw=true'
+  const starImgCorner = 'https://github.com/tranhonghan/images/blob/main/star_corner.png?raw=true'
+
   const itemCount = useSelector(
     (state: any) =>
       state?.cartState?.cartDetail?.cartItems?.find((item: any) => item?.foodId === foodId)
@@ -35,12 +43,15 @@ const FoodScreen = ({ route, navigation }: any) => {
   );
   const dispatch = useDispatch<any>();
   useEffect(() => {
-    FoodService.getOneFoodById(foodId).then(response => {
+    FoodService.getOneFoodById(foodId).then((response: any) => {
       setFood(response?.data);
     });
   }, []);
-
-  // const addToCart = (foodId: any) => dispatch(CartAction.addToCart({ foodId }));
+  useEffect(() => {
+    ReviewService.getReviews(foodId).then((response: any) => {
+      setReviews(response?.data)
+    })
+  }, []);
   const addToCart = () => {
     let cart = {
       foodId: food.id,
@@ -57,6 +68,101 @@ const FoodScreen = ({ route, navigation }: any) => {
     }
     dispatch(CartAction.removeFromCart({ cart }));
   }
+
+  const renderContent = () => {
+    const reviewDate = moment().format('DD-MM-YYYY HH:mm');
+    if (selectedSubMenu === 'Details') {
+      return (
+        <View style={styles.detailsContainer}>
+          {food?.description ? (
+            <>
+              <Text style={styles.detailHeader}>Description</Text>
+              <Text style={styles.detailContent}>{food?.description}</Text>
+            </>
+          ) : null}
+          {food?.ingredients ? (
+            <>
+              <Text style={styles.detailHeader}>Ingredients</Text>
+              <Text style={styles.detailContent}>{food?.ingredients}</Text>
+            </>
+          ) : null}
+        </View>
+      )
+    } else if (selectedSubMenu === 'Reviews') {
+      return (
+        <ScrollView style={styles.detailsContainer}>
+          <Text style={styles.detailHeader}>Comment</Text>
+          {reviews?.map((item: any, index: any) => (
+            <View key={index} style={{ flexDirection: 'row', marginTop: 15 }}>
+              <View style={{ width: '10%' }}>
+                <Image
+                  style={{
+                    width: 40,
+                    height: 40,
+                    borderRadius: 50
+                  }}
+                  source={{
+                    uri: 'https://reactnative.dev/img/tiny_logo.png'
+                  }}
+                  key={item?.id}
+                />
+              </View>
+              <View style={{ width: '90%', marginLeft: 15 }}>
+                <Text style={{ fontWeight: 'bold' }}>
+                  {item.username}
+                </Text>
+                <View style={styles.customRatingBar}>
+                  {Array.from({ length: item.rate }).map((_, index) => (
+                    <View style={{ marginRight: 3 }} key={index}>
+                      <Image
+                        style={styles.starImgStyle}
+                        source={{ uri: starImgFilled }}
+                      />
+                    </View>
+                  ))}
+                  {Array.from({ length: 5 - item.rate }).map((_, index) => (
+                    <View key={index + item.rate}>
+                      <Image
+                        style={styles.starImgStyle}
+                        source={{ uri: starImgCorner }}
+                      />
+                    </View>
+                  ))}
+                </View>
+                <Text style={{ marginTop: 15, marginBottom: 20 }}>
+                  {item.context}
+                </Text>
+                <View style={{ flexDirection: 'row', flexWrap:'wrap' }}>
+                  {item.reviewImg.map((img: any, index: any) => (
+                    <View style={{ marginRight: 10 }} key={index}>
+                      <Image
+                        style={{
+                          width: 80,
+                          height: 80,
+                          marginBottom: 15
+                        }}
+                        source={{
+                          uri: StaticImageService.getReviewImg(
+                            img,
+                          ),
+                        }}
+                      />
+                    </View>
+                  ))}
+                </View>
+                <Text>
+                  {item.date = reviewDate}
+                </Text>
+              </View>
+            </View>
+          ))}
+        </ScrollView>
+      )
+    } else {
+      return null
+    }
+  }
+
   return (
     <View style={styles.container}>
       <StatusBar
@@ -113,20 +219,7 @@ const FoodScreen = ({ route, navigation }: any) => {
               </Text>
             </TouchableOpacity>
           </View>
-          <View style={styles.detailsContainer}>
-            {food?.description ? (
-              <>
-                <Text style={styles.detailHeader}>Description</Text>
-                <Text style={styles.detailContent}>{food?.description}</Text>
-              </>
-            ) : null}
-            {food?.ingredients ? (
-              <>
-                <Text style={styles.detailHeader}>Ingredients</Text>
-                <Text style={styles.detailContent}>{food?.ingredients}</Text>
-              </>
-            ) : null}
-          </View>
+          {renderContent()}
         </View>
       </ScrollView>
       <View style={styles.buttonsContainer}>
@@ -321,6 +414,15 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 14 * 1.4,
     fontFamily: Fonts.POPPINS_MEDIUM,
+  },
+  customRatingBar: {
+    flexDirection: 'row',
+    marginTop: 5
+  },
+  starImgStyle: {
+    width: 15,
+    height: 15,
+    resizeMode: 'cover'
   },
 });
 

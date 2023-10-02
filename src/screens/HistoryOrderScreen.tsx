@@ -5,14 +5,15 @@ import {
     StyleSheet,
     ScrollView,
     StatusBar,
-    Image
+    Image,TouchableOpacity
 } from 'react-native';
 import { Colors, Fonts, Images } from '../contants';
-import { OrderComingCard, Separator } from '../components';
+import { OrderCard, OrderComingCard, Separator } from '../components';
 import { OrderService } from '../services';
 import { Display } from '../utils';
+import OrderedCard from '../components/OrderedCard';
 
-const HistoryOrderScreen = () => {
+const HistoryOrderScreen = ({navigation}:any) => {
     const [orderHistory, setOrderHistory] = useState<any>();
     useEffect(() => {
         OrderService.getOrderHistory().then((response) => {
@@ -31,6 +32,7 @@ const HistoryOrderScreen = () => {
                 translucent
             />
             <Separator height={StatusBar.currentHeight} />
+           
             {orderHistory ? (
                 <>
                     <ScrollView showsVerticalScrollIndicator={false}>
@@ -40,6 +42,9 @@ const HistoryOrderScreen = () => {
                             {...item}
                             restaurant={item.restaurant[0]}
                             key={item.id}
+                            navigate={() =>
+                                navigation.navigate()
+                              }
                             />
                         ))}
                         </View>
