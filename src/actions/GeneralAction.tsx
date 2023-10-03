@@ -3,6 +3,7 @@ import { Dispatch } from "redux";
 import BookmarkAction from './BookmarkAction';
 import { useDispatch } from 'react-redux';
 import CartAction from './CartAction';
+import OrderAction from './OrderAction';
 
 const types = {
   SET_IS_APP_LOADING: 'SET_IS_APP_LOADING',
@@ -49,6 +50,7 @@ const setUserData = () => {
         }
         dispatch<any>(CartAction.getCartItemsSetReduer());
         dispatch<any>(CartAction.getCartItemsdDetailSetReduer());
+        dispatch<any>(OrderAction.getOrderComing());
     })
   };
 };
@@ -75,6 +77,7 @@ const appStart = () => {
             });
             dispatch<any>(CartAction.getCartItemsdDetailSetReduer());
             dispatch<any>(CartAction.getCartItemsSetReduer());
+            dispatch<any>(OrderAction.getOrderComing());
           } else if (userResponse?.statusCode === 401) {
             AuthenticationService.refreshToken().then(tokenResponse => {
               if (tokenResponse?.data.status) {
@@ -91,6 +94,7 @@ const appStart = () => {
                     });
                     dispatch<any>(CartAction.getCartItemsdDetailSetReduer());
                     dispatch<any>(CartAction.getCartItemsSetReduer());
+                    dispatch<any>(OrderAction.getOrderComing());
                   }
                 });
               } else {

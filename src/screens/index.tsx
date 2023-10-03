@@ -18,7 +18,6 @@ import HistoryOrderScreen from './HistoryOrderScreen';
 import LoadingStartScreen from './LoadingStartScreen';
 import SuccessOrder from './SuccessOrder';
 import ResultSreach from './ResultSreach';
-import GoogleMapScreen from './GoogleMapScreen';
 import ReviewScreen from './ReviewScreen';
 import ReviewActionScreen from './ReviewActionScreen';
 import RestaurantsByTagScreen from './RestaurantsByTagScreen';
@@ -42,9 +41,6 @@ export {
     HistoryOrderScreen,
     LoadingStartScreen,
     SuccessOrder,
-    ResultSreach,
-    GoogleMapScreen,
-    ReviewScreen,
-    ReviewActionScreen,
-    RestaurantsByTagScreen
+    ResultSreach
+
 };

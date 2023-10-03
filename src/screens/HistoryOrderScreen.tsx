@@ -11,19 +11,14 @@ import { Colors, Fonts, Images } from '../contants';
 import { OrderCard, OrderComingCard, Separator } from '../components';
 import { OrderService } from '../services';
 import { Display } from '../utils';
-import OrderedCard from '../components/OrderedCard';
-
+import { useSelector, useDispatch } from 'react-redux';
+import OrderAction from '../actions/OrderAction';
 const HistoryOrderScreen = ({navigation}:any) => {
-    const [orderHistory, setOrderHistory] = useState<any>();
+    const dispatch = useDispatch<any>();
     useEffect(() => {
-        OrderService.getOrderHistory().then((response) => {
-            if (response?.status) {
-                setOrderHistory(response?.data);
-            } else {
-                console.log(response.message);
-            }
-        })
+        dispatch(OrderAction.getOrderHistory());
     }, [])
+    const orderHistory = useSelector((state:any) => state?.orderState.orderHistory);
     return (
         <View style={styles.container}>
             <StatusBar
@@ -41,6 +36,7 @@ const HistoryOrderScreen = ({navigation}:any) => {
                             <OrderComingCard 
                             {...item}
                             restaurant={item.restaurant[0]}
+                            navigate={navigation}
                             key={item.id}
                             navigate={() =>
                                 navigation.navigate()
@@ -49,11 +45,6 @@ const HistoryOrderScreen = ({navigation}:any) => {
                         ))}
                         </View>
                     </ScrollView>
-                    <View>
-                        <Text>
-                            order history
-                        </Text>
-                    </View>
                 </>) : (
                 <>
                     <View style={styles.emptyCartContainer}>
@@ -70,6 +61,7 @@ const HistoryOrderScreen = ({navigation}:any) => {
                     </View>
                 </>
             )}
+            <Separator height={Display.setHeight(8)} />
         </View>
     )
 }

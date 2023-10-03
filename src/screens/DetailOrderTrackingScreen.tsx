@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import {
   View,
@@ -9,61 +8,31 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import { Colors, Fonts, Images } from '../contants';
-import { DeliveryAddress, FoodCard, FoodCheckoutCard, Separator } from '../components';
+import { Fonts, Images } from '../contants';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import { Display } from '../utils';
-import { useDispatch, useSelector } from 'react-redux';
-import { CartAction, GeneralAction } from '../actions';
 import { OrderService } from '../services';
-import OrderAction from '../actions/OrderAction';
+import Separator from '../components/Separator ';
+import Colors from '../contants/Colors';
+import moment from 'moment';
+import { Display } from '../utils';
+import FoodOrderCard from '../components/FoodOrderCard';
 
-const CheckoutScreen = ({ route, navigation }: any) => {
-  const dispatch = useDispatch<any>();
-  const { restaurantId ,grandTotal,itemTotal} = route.params;
-  const cart = useSelector((state: any) => state?.cartState?.cartDetail);
-  
-  const userData = useSelector(
-    (state: any) => state?.generalState?.userData,
-  );
-  const arrayCart: { foodId: any; count: any; }[] = [];
-  const [deliveryAddress, setDeliveryAddress] = useState('');
-  const [note, setNote] = useState('');
-  const [paymentMothod, setPaymentMothod] = useState(1);
-
-  cart?.cartItems?.filter((item:any)=>item?.food[0]?.restaurantId === restaurantId).map((item: any) => {
-    arrayCart?.push({ "foodId": item.foodId, "count": item.count });
-  }
-  )
-
-  const addOrder = () => {
-    let order = {
-      CartOrder: arrayCart,
-      Quantity: itemTotal,
-      DeliveryAddress: "ha noi, Viet Nam",
-      Note: note,
-      paymentMothod: paymentMothod,
-      restaurantId:restaurantId,
-      phoneAddress:"0182424343",
-      priceTotal: grandTotal,
-      username: userData.username,
-     
-    };
-
-    OrderService.addOrder(order).then((response)=>{
-        if(response?.status){
-          dispatch(CartAction.getCartItemsdDetailSetReduer());
-          dispatch(CartAction.getCartItemsSetReduer());
-          dispatch(OrderAction.getOrderComing());
-          navigation.navigate("SuccessOrder");
-        }else{
-          console.log(response.message)
-        }
+const DetailOrderTrackingScreen = ({ route, navigation }: any) => {
+  const { orderId } = route.params;
+  const [order, setOrder] = useState<any>()
+  const [orderDetail, setOrderDetail] = useState<any>()
+  useEffect(() => {
+    OrderService.getOrderDetail(orderId).then((response: any) => {
+      if (response.status) {
+        setOrderDetail(response.orderDetail)
+        setOrder(response.data)
+      }
     })
+  }, [])
+  const dataFormat = moment(order?.dateCreated).format('YYYY/MM/DD');
 
-  }
   return (
     <View style={styles.container}>
       <StatusBar
@@ -78,37 +47,93 @@ const CheckoutScreen = ({ route, navigation }: any) => {
           size={30}
           onPress={() => navigation.goBack()}
         />
-        <Text style={styles.headerTitle}>Checkout</Text>
+        <Text style={styles.headerTitle}>Order Detail</Text>
+      </View>
+      <View style={styles.amountContainer}>
+        <View style={{ flexDirection: "row", alignItems: 'center', justifyContent: 'flex-end', marginBottom: 10 }} >
+          <Text style={styles.amountLabelText}>{(() => {
+            switch (order?.deliveringStatus) {
+              case 2:
+                return "-- Confirmed --"
+              case 3:
+                return "-- Order processing --"
+              case 4:
+                return "-- On Thy Way --"
+              case 5:
+                return "-- Deliverred --"
+            }
+          })()}</Text>
+          {(() => {
+            switch (order?.deliveringStatus) {
+              case 2:
+                return <Image
+                  style={{ borderRadius: 5, marginLeft: 5 }}
+                  source={require('../assets/images/delivery/confirmed.png')} />
+              case 3:
+                return <Image
+                  style={{ borderRadius: 5, marginLeft: 5 }}
+                  source={require('../assets/images/delivery/OrderProcessing.png')} />
+              case 4:
+                return <Image
+                  style={{ borderRadius: 5, marginLeft: 5 }}
+                  source={require('../assets/images/delivery/OnThyWay.png')} />
+              case 5:
+                return <Image
+                  style={{ borderRadius: 5, marginLeft: 5 }}
+                  source={require('../assets/images/delivery/deliverred.png')} />
+            }
+          })()}
+        </View>
+        <View style={styles.amountSubContainer}>
+          <Text style={styles.amountLabelText}>Order code: <Text style={styles.amountText}>
+            {order?.orderCode}
+          </Text></Text>
+        </View>
+        <View style={styles.amountSubContainer}>
+          <Text style={styles.amountLabelText}>Delivering From : <Text style={styles.amountText}>
+            {order?.restaurant[0].location}
+          </Text></Text>
+        </View>
+        <View style={styles.amountSubContainer}>
+          <Text style={styles.amountLabelText}>To : <Text style={styles.amountText}>
+            {order?.deliveryAddress}
+          </Text></Text>
+        </View>
+        <View style={styles.amountSubContainer}>
+          <Text style={styles.amountLabelText}>{order?.user[0].username} |  {order?.phoneAddress}</Text>
+        </View>
+        <View style={styles.amountSubContainer}>
+          <Text style={styles.amountLabelText}>Date Delivering :<Text style={styles.amountText}>
+            {dataFormat}
+          </Text> </Text>
+        </View>
+        <View style={styles.amountSubContainer}>
+          {order?.paymentMothod == 1 ?
+            <Text style={styles.amountLabelText}>Paymen Method : <Text style={styles.amountText}>
+              Payment on delivered</Text></Text>
+            :
+            <Text style={styles.amountLabelText}>Paymen Method : <Text style={styles.amountText}>
+              Prepayment</Text></Text>
+          }
+
+        </View>
       </View>
       <ScrollView>
-        <DeliveryAddress />
         <View style={styles.foodList}>
+          {orderDetail?.map((item: any) => (
+            <FoodOrderCard
+              {...item}
+              foods={item.foods[0]}
+              key={item.id}
+            />
+          ))}
 
-          {cart?.cartItems?.filter((item: any) => item?.food[0].restaurantId === restaurantId)
-            ?.map((item2: any) => (
-              <FoodCheckoutCard
-                {...item2?.food[0]}
-                key={item2?.food[0]?.id}
-
-              />
-            ))}
-        </View>
-        <View style={styles.promoCodeContainer}>
-          <View style={styles.rowAndCenter}>
-            <Entypo name="ticket" size={30} color={Colors.DEFAULT_YELLOW} />
-            <Text style={styles.promoCodeText}>Add Promo Code</Text>
-          </View>
-          <Ionicons
-            name="chevron-forward-outline"
-            size={20}
-            color={Colors.DEFAULT_BLACK}
-          />
         </View>
         <View style={styles.amountContainer}>
           <View style={styles.amountSubContainer}>
             <Text style={styles.amountLabelText}>Item Total</Text>
             <Text style={styles.amountText}>
-              $ {grandTotal.toFixed(2)} ({itemTotal} mon)
+              $  {order?.priceTotal} ({order?.quantity} mon)
             </Text>
           </View>
           <View style={styles.amountSubContainer}>
@@ -128,20 +153,11 @@ const CheckoutScreen = ({ route, navigation }: any) => {
         <View style={styles.totalContainer}>
           <Text style={styles.totalText}>Total</Text>
           <Text style={styles.totalText}>
-            $ {grandTotal.toFixed(2)}
+            {order?.priceTotal}
           </Text>
         </View>
-        <TouchableOpacity style={styles.checkoutButton}
-          onPress={() => addOrder()}
-        >
-          <View >
-            <Text style={styles.checkoutText}>Conform order</Text>
-          </View>
-
-        </TouchableOpacity>
-        <Separator height={Display.setHeight(9)} />
       </ScrollView>
-
+      <Separator height={Display.setHeight(5)} />
     </View>
   );
 };
@@ -282,6 +298,12 @@ const styles = StyleSheet.create({
     height: Display.setWidth(60),
     width: Display.setWidth(60),
   },
+  gettingStartedButtonText: {
+    fontSize: 15,
+    color: Colors.DEFAULT_GREEN,
+    lineHeight: 20 * 1.4,
+    fontFamily: Fonts.POPPINS_MEDIUM,
+  },
 });
 
-export default CheckoutScreen;
+export default DetailOrderTrackingScreen;

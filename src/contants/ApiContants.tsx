@@ -20,6 +20,8 @@ const BACKEND_API = {
   ADDORDER: '/orders/add',
   GETORDERCOMING: '/orders/getordercoming',
   GETORDERHISTORY: '/orders/getorderhistory',
+  GETORDERDETAIL: '/orders/get-order-detail/',
+
   ADDREVIEW:'/reviews/add',
   GETREVIEW:'/reviews/get/',
   GETREVIEWITEM:'/reviews/item/',

@@ -11,7 +11,7 @@ const SuccessOrder = ({navigation}:any) => {
         dispatch(GeneralAction.setIsAppLoadingStart(-1));
         setTimeout(() => {
             dispatch(GeneralAction.setIsAppLoadingStart(100));
-            navigation.navigate("OrderTrackingScreen");
+            navigation.navigate( 'OrderTabs', { screen: 'OrderTrackingScreen' });
         },2000)
     },[])
   return (
