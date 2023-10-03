@@ -17,7 +17,8 @@ import OrderTrackingScreen from './OrderTrackingScreen';
 import HistoryOrderScreen from './HistoryOrderScreen';
 import LoadingStartScreen from './LoadingStartScreen';
 import SuccessOrder from './SuccessOrder';
-import ResultSreach  from './ResultSreach';
+import ResultSearch  from './ResultSearch';
+import Search from './Search';
 export {
     SplashScreen,
     WelcomeScreen,
@@ -38,6 +39,7 @@ export {
     HistoryOrderScreen,
     LoadingStartScreen,
     SuccessOrder,
-    ResultSreach
+    ResultSearch,
+    Search
 
 };

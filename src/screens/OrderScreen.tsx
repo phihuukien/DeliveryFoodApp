@@ -22,7 +22,6 @@ const OrderScreen = ({ navigation }: any) => {
         backgroundColor={Colors.DEFAULT_GREEN}
         translucent
       />
-      <Separator height={StatusBar.currentHeight} />
 
       {cart?.length > 0 ? (
         <>

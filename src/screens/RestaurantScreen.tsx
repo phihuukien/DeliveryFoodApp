@@ -82,7 +82,7 @@ const RestaurantScreen = ({ route, navigation }: any) => {
         setSelectedCategory(response?.data?.categories[0]);
         setRestaurant(response.data)
       }
-    });;
+    });
   }, []);
 
   const addBookmark = () =>

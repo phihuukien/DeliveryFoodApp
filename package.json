@@ -17,6 +17,7 @@
     "@react-navigation/native": "^6.1.7",
     "@react-navigation/native-stack": "^6.9.13",
     "axios": "^1.4.0",
+    "lodash.filter": "^4.6.0",
     "lottie-react-native": "^5.1.6",
     "moment": "^2.29.4",
     "react": "18.2.0",
@@ -38,6 +39,7 @@
     "@react-native/eslint-config": "^0.72.2",
     "@react-native/metro-config": "^0.72.9",
     "@tsconfig/react-native": "^3.0.0",
+    "@types/lodash.filter": "^4.6.7",
     "@types/react": "^18.0.24",
     "@types/react-native-vector-icons": "^6.4.13",
     "@types/react-test-renderer": "^18.0.0",
@@ -54,8 +56,10 @@
   },
   "projectConfig": {
     "backendApiBaseUrl": "http://192.168.1.23:7090/api",
+    "backendApiBaseUrl": "http://192.168.137.1:7090/api",
     "unbackendApiBaseUrl": "http://172.16.0.74:7090/api",
     "backendApiBaseUrlImg": "http://192.168.1.23:7090/images",
+    "backendApiBaseUrlImg": "http://192.168.137.1:7090/images",
     "unbackendApiBaseUrlImg": "http://172.16.0.74:7090/images"
   }
 }

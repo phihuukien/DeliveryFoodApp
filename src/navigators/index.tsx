@@ -13,12 +13,14 @@ import {
   LoadingStartScreen,
   RegisterPhoneScreen,
   RestaurantScreen,
+  Search,
   SigninScreen,
   SignupScreen,
   SplashScreen,
   SuccessOrder,
   VerificationScreen,
-  WelcomeScreen
+  WelcomeScreen,
+  ResultSearch
 } from "../screens";
 import { useSelector, useDispatch } from 'react-redux';
 import { BookmarkAction, CartAction, GeneralAction } from "../actions";
@@ -67,6 +69,8 @@ const Navigators = () => {
             <Stack.Screen name="CartScreen" component={CartScreen} />
             <Stack.Screen name="SuccessOrder" component={SuccessOrder} />
             <Stack.Screen name="DetailOrderTrackingScreen" component={DetailOrderTrackingScreen} />
+            <Stack.Screen name="Search" component={Search} />
+            <Stack.Screen name="ResultSearch" component={ResultSearch} />
           </>
         )}
       </Stack.Navigator>

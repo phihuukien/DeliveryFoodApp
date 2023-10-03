@@ -1,13 +1,31 @@
-import { Image, StyleSheet, Text } from "react-native";
+import { Image, StyleSheet, Text, FlatList} from "react-native";
+import React, { useState, useEffect } from 'react';
 import { View } from "react-native";
 import { Colors, Fonts, Images } from "../contants";
 import { Display } from "../utils";
-import { FocusAwareStatusBar, Separator } from "../components";
+import { FocusAwareStatusBar, SearchItem, Separator } from "../components";
 import { StatusBar } from "react-native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
+import { SearchService } from "../services";
+import { useRoute } from '@react-navigation/native';
 
 const ResultSreach = ({ navigation }: any) => {
+    const route = useRoute();
+    const { foodName }:any = route.params;
+    const [restaurant, setRestaurant] = useState([]);
+    useEffect(() => {
+        
+        SearchService.GetRestaurantsByNameFood(foodName).then(response => {
+          
+                if (response.status) {
+                    setRestaurant(response.data);
+                    console.log(response.data);
+                 
+                    } 
+            });
+    }, []);
+    console.log(restaurant);
     return (
         <View style={styles.container}>
             <FocusAwareStatusBar backgroundColor={Colors.DEFAULT_WHITE} barStyle="dark-content" translucent></FocusAwareStatusBar>
@@ -18,7 +36,7 @@ const ResultSreach = ({ navigation }: any) => {
                     size={30}
                     onPress={() => navigation.goBack()}
                 />
-                <Text style={styles.headerTitle}>Bookmarks</Text>
+                <Text style={styles.headerTitle}>Result Sreach</Text>
             </View>
 
             <View style={styles.searchContainer}>
@@ -28,7 +46,7 @@ const ResultSreach = ({ navigation }: any) => {
                         size={25}
                         color={Colors.DEFAULT_GREY}
                     />
-                    <Text style={styles.searchText}>Search..</Text>
+                    <Text style={styles.searchText}>{foodName}</Text>
                 </View>
                 <Feather
                     name="sliders"
@@ -41,46 +59,23 @@ const ResultSreach = ({ navigation }: any) => {
                 <View style={styles.optionResult}>
                     <Text style={styles.textOptionResult}>Near By Restaurants</Text>
                 </View>
-                <View style={styles.subcontainer}>
-                    <View>
-                        <Image
-                            source={require('../assets/images/kfc.png')}
-                            style={styles.posterStyle}
-                        />
-                    </View>
-                    <View style={styles.labelContainer}>
-                        <View style={styles.titleContainer}>
-                            <Text style={styles.titleText}>KFC</Text>
-                            <View style={styles.rowAndCenter}>
-                                <Ionicons
-                                    name={'bookmark-outline'}
-                                    color={Colors.DEFAULT_YELLOW}
-                                    size={24} />
-                            </View>
-                        </View>
-                        <Text style={styles.tagsText}>chichken</Text>
-                        <View style={styles.deliveryDetailsContainer}>
-                            <View style={styles.rowAndCenter}>
-                                <Image
-                                    source={Images.DELIVERY_CHARGE}
-                                    style={styles.deliveryDetailsIcon}
-                                />
-                                <Text style={styles.deliveryDetailsText}>Free Delivery</Text>
-                            </View>
-                            <View style={styles.rowAndCenter}>
-                                <Image
-                                    source={Images.DELIVERY_TIME}
-                                    style={styles.deliveryDetailsIcon}
-                                />
-                                <Text style={styles.deliveryDetailsText}>30 min</Text>
-                            </View>
-                            <View style={styles.rowAndCenter}>
-
-                                <Text style={styles.deliveryDetailsText}></Text>
-                            </View>
-                        </View>
-                    </View>
-                </View>
+                <FlatList
+                data={restaurant}
+                keyExtractor={(item: any) => item.id}
+                showsHorizontalScrollIndicator={false}
+                ListHeaderComponent={() => <Separator width={20} />}
+                ListFooterComponent={() => <Separator width={20} />}
+                ItemSeparatorComponent={() => <Separator width={10} />}
+                renderItem={({ item }: any) => (
+                  <SearchItem   
+                    {...item}
+                    restaurant={item.restaurant[0]}
+                    navigate={(restaurantId: any) =>
+                      navigation.navigate('RestaurantScreen', { restaurantId: restaurantId })
+                    }
+                  />
+                )}
+              />
             </View>
         </View>
     )
@@ -98,7 +93,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         backgroundColor: Colors.DEFAULT_WHITE,
         marginTop: 8,
-      },
+    },
     posterStyle: {
         width: Display.setWidth(20),
         height: Display.setWidth(20),
