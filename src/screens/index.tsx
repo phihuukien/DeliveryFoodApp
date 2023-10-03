@@ -41,6 +41,9 @@ export {
     HistoryOrderScreen,
     LoadingStartScreen,
     SuccessOrder,
-    ResultSreach
+    ResultSreach,
+    RestaurantsByTagScreen,
+    ReviewScreen,
+    ReviewActionScreen
 
 };

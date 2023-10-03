@@ -3,7 +3,7 @@ import { Colors, Fonts } from "../contants";
 import { Display } from "../utils";
 import { StaticImageService } from "../services";
 import moment from 'moment';
-const OrderedCard = ({ quantity, paymentMothod, status, priceTotal, dateCreated, restaurant, navigate, reviewStatus }: any) => {
+const OrderedCard = ({ quantity, paymentMothod, deliveringStatus, priceTotal, dateCreated, restaurant, navigate, reviewStatus }: any) => {
   const dataFormat = moment(dateCreated).format('YYYY/MM/DD -- hh:mm:ss a');
   return (
     <View style={styles.container}>
@@ -37,19 +37,19 @@ const OrderedCard = ({ quantity, paymentMothod, status, priceTotal, dateCreated,
           <Text>Ordered </Text>
         </View>
         <View>
-          <Text>
+          <Text style={{ color: Colors.DEFAULT_GREEN }}>
             {(() => {
-              switch (status) {
+              switch (deliveringStatus) {
                 case 1:
                   return "Looking for a driver"
                 case 2:
-                  return "The driver is accepting orders"
+                  return "The driver has been found"
                 case 3:
-                  return "The driver is delivering"
+                  return "Order Processing"
                 case 4:
-                  return "Finish"
-                default:
-                  return "Cancelled"
+                  return "On The Way"
+                case 5:
+                  return "Deliverred"
               }
             })()}
           </Text>

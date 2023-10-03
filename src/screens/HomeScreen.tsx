@@ -109,7 +109,7 @@ const HomeScreen = ({ navigation }: any) => {
                   activeCategory={activeCategory}
                   setActiveCategory={setActiveCategory}
                   navigate={() =>
-                    navigation.navigate("RestaurantsByTag",{ tagName: item?.name })
+                    navigation.navigate("RestaurantsByTag", { tagName: item?.name })
                   }
                 />
               ))}
@@ -138,41 +138,14 @@ const HomeScreen = ({ navigation }: any) => {
               />
             </View>
             <View style={styles.sortListContainer}>
-              <TouchableOpacity
-                style={sortStyle(activeSortItem === 'recent')}
-                activeOpacity={0.8}
-                onPress={() => setActiveSortItem("recent")}>
-                <Text style={styles.sortListItemText}>Recent</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={sortStyle(activeSortItem === 'favorite')}
-                activeOpacity={0.8}
-                onPress={() => setActiveSortItem("favorite")}>
-                <Text style={styles.sortListItemText}>Favorite</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={sortStyle(activeSortItem === 'rating')}
-                activeOpacity={0.8}
-                onPress={() => setActiveSortItem("rating")}>
-                <Text style={styles.sortListItemText}>Rating</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={sortStyle(activeSortItem === 'popular')}
-                activeOpacity={0.8}
-                onPress={() => setActiveSortItem("popular")}>
-                <Text style={styles.sortListItemText}>Popular</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={sortStyle(activeSortItem === 'trending')}
-                activeOpacity={0.8}
-                onPress={() => setActiveSortItem("trending")}>
-                <Text style={styles.sortListItemText}>Trending</Text>
-              </TouchableOpacity>
+              <Text style={styles.sortListItemText}></Text>
             </View>
             {
               restaurants?.map((item) => {
                 return (
-                  <RestaurantMediumCard {...item} key={item?.id} />
+                  <RestaurantMediumCard {...item} key={item?.id}
+                    navigate={navigation}
+                  />
                 )
               })
             }

@@ -16,8 +16,7 @@ import { Display } from '../utils';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useDispatch, useSelector } from 'react-redux';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import { BookmarkAction, CartAction } from '../actions';
+import { BookmarkAction } from '../actions';
 
 const ListHeader = () => (
   <View
@@ -65,11 +64,12 @@ const RestaurantScreen = ({ route, navigation }: any) => {
 
 
   // const cart = useSelector((state: any) => state?.cartState?.cart);
+
   const itemCount = useSelector(
     (state: any) =>
-      state?.cartState?.cart?.find((item: any) => item?.id === restaurantId)
-        ?.count,
+      state?.cartState?.cart?.find((item: any) => item?.id === restaurantId)?.count,
   );
+  
   const isBookmarked = useSelector(
     (state: any) =>
       state?.bookmarkState?.bookmarks?.filter(
@@ -217,6 +217,7 @@ const RestaurantScreen = ({ route, navigation }: any) => {
           </View>
         </>
       ) : null}
+
       <Ionicons
         style={{ position: 'absolute', color: 'white', zIndex: 100, top: 50 }}
         name="chevron-back-outline"

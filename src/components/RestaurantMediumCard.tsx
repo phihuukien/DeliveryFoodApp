@@ -1,33 +1,51 @@
-import React from 'react';
-import {View, Text, StyleSheet, Image} from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import {Colors, Fonts, Images} from '../contants';
-import {StaticImageService} from '../services';
-import {Display} from '../utils';
+import { Colors, Fonts, Images } from '../contants';
+import { StaticImageService } from '../services';
+import { Display } from '../utils';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import ReviewService from '../services/ReviewService';
 
-const RestaurantMediumCard = ({name, images: {logo}, times, distance, tags}:any) => {
-  
+const RestaurantMediumCard = ({ name, images: { logo }, times, distance, tags, id, navigate }: any) => {
+  const [rating, setRating] = useState(0);
+  const [ratedOrder, setRatedOrder] = useState(Number);
+  ReviewService.getRatingRestaurant(id).then((response: any) => {
+    setRating(response.avgRating);
+    setRatedOrder(response.totalOrderRated);
+  })
   return (
     <View style={styles.container}>
       <View>
-        <Image
-          source={{uri: StaticImageService.getLogo(logo)}}
-          style={styles.posterStyle}
-        />
+        <TouchableOpacity
+          onPress={() => navigate.navigate('RestaurantScreen', { restaurantId: id, rate: rating, review: ratedOrder })}>
+          <Image
+            source={{ uri: StaticImageService.getLogo(logo) }}
+            style={styles.posterStyle}
+          />
+        </TouchableOpacity>
       </View>
       <View style={styles.labelContainer}>
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>{name}</Text>
           <View style={styles.rowAndCenter}>
             <Ionicons
-                name={'bookmark-outline'}
-                color={Colors.DEFAULT_YELLOW}
-                size={24}/>
+              name={'bookmark-outline'}
+              color={Colors.DEFAULT_YELLOW}
+              size={24} />
           </View>
         </View>
         <Text style={styles.tagsText}>{tags?.join(' • ')}</Text>
         <View style={styles.deliveryDetailsContainer}>
+          <Text style={styles.deliveryDetailsText}>
+            <FontAwesome name="star" size={14} color={Colors.DEFAULT_YELLOW} />
+            <Text style={styles.ratingText}>{rating.toFixed(1)} </Text>
+            {ratedOrder > 2 ?
+              <Text style={styles.reviewsText}>(2+)</Text>
+              :
+              <Text style={styles.reviewsText}>({ratedOrder})</Text>
+            }
+          </Text>
           <View style={styles.rowAndCenter}>
             <Image
               source={Images.DELIVERY_CHARGE}
@@ -35,15 +53,9 @@ const RestaurantMediumCard = ({name, images: {logo}, times, distance, tags}:any)
             />
             <Text style={styles.deliveryDetailsText}>Free Delivery</Text>
           </View>
+
           <View style={styles.rowAndCenter}>
-            <Image
-              source={Images.DELIVERY_TIME}
-              style={styles.deliveryDetailsIcon}
-            />
-            <Text style={styles.deliveryDetailsText}>{times} min</Text>
-          </View>
-          <View style={styles.rowAndCenter}>
-            
+
             <Text style={styles.deliveryDetailsText}></Text>
           </View>
         </View>

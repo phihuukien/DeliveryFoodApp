@@ -11,6 +11,7 @@ import {
     Pressable,
     TextInput
 } from 'react-native';
+const config = require('../../package.json').projectConfig;
 
 import { Colors, Fonts, Images } from '../contants';
 import { OrderComingCard, Separator } from '../components';
@@ -19,20 +20,22 @@ import { Display } from '../utils';
 import { useDispatch, useSelector } from 'react-redux';
 import OrderAction from '../actions/OrderAction';
 import { HubConnectionBuilder } from '@microsoft/signalr';
+import ReviewAction from '../actions/ReviewAction';
 
 const OrderTrackingScreen = ({ navigation }: any) => {
     const [cancelReason, setcancelReason] = useState('');
+    const linkRealtime = config.linkRealtime;
     const dispatch = useDispatch<any>();
     const [modalVisible, setModalVisible] = useState(false);
     useEffect(() => {
         dispatch(OrderAction.getOrderComing());
         const connection = new HubConnectionBuilder()
-            .withUrl('http://192.168.1.23:7090/chatHub')
+            .withUrl(linkRealtime)
             .build();
         connection.on('SendStutusToMobileForShipper', (message) => {
             dispatch(OrderAction.getOrderHistory());
             dispatch(OrderAction.getOrderComing());
-
+            dispatch(ReviewAction.getREVIEW());
         });
 
         connection.start()

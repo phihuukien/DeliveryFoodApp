@@ -11,18 +11,16 @@ import { Separator } from '../components';
 import { OrderService } from '../services';
 import { Display } from '../utils';
 import OrderedCard from '../components/OrderedCard';
+import { useDispatch, useSelector } from 'react-redux';
+import ReviewAction from '../actions/ReviewAction';
 
 const ReviewScreen = ({ navigation }: any) => {
-  const [orderHistory, setOrderHistory] = useState<any>();
+  const dispatch = useDispatch<any>();
+  
   useEffect(() => {
-    OrderService.getOrderHistory().then((response) => {
-      if (response?.status) {
-        setOrderHistory(response?.data);
-      } else {
-        console.log(response.message);
-      }
-    })
+    dispatch(ReviewAction.getREVIEW());
   }, [])
+  const orderHistory = useSelector((state: any) => state?.reviewState?.review);
   return (
     <View style={styles.container}>
       <StatusBar
@@ -69,7 +67,9 @@ const ReviewScreen = ({ navigation }: any) => {
           </View>
         </>
       )}
+       <Separator height={Display.setHeight(6)} />
     </View>
+    
   )
 }
 const styles = StyleSheet.create({

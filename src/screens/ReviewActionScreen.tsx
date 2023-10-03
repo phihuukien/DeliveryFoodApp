@@ -5,12 +5,14 @@ import { PermissionsAndroid, Pressable, ScrollView } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { Text, View, StyleSheet, StatusBar, TouchableOpacity, Image, TextInput } from 'react-native';
 import ReviewService from '../services/ReviewService';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { StaticImageService } from '../services';
 import { ApiContants } from '../contants';
+import ReviewAction from '../actions/ReviewAction';
 
 const ReviewActionScreen = ({ navigation, route }: any) => {
     const { orderId } = route.params
+    const dispatch = useDispatch<any>();
     const [food, setFood] = useState<any>();
     const [foodIdList, setFoodIdList] = useState<Array<string> | undefined>(undefined);
 
@@ -62,7 +64,7 @@ const ReviewActionScreen = ({ navigation, route }: any) => {
 
         ReviewService.addReview(formData).then((response) => {
             if (response.status == true) {
-
+                dispatch(ReviewAction.getREVIEW());
                 navigation.navigate('HomeTabs')
             }
         })

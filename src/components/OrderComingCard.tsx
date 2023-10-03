@@ -61,7 +61,7 @@ const OrderComingCard = ({setModalVisible, id,quantity,orderCode, paymentMothod,
                 case 3:
                   return "Order Processing"
                 case 4:
-                  return "On Thy Way"
+                  return "On The Way"
                   case 5:
                     return "Deliverred"
               }

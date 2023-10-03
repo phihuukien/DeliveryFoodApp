@@ -34,7 +34,6 @@ const RestaurantTagCard = ({ id, name, images, times, distance, tags, navigate }
           <Text style={styles.tagsText}>{tags?.join(' • ')}</Text>
           <View style={styles.deliveryDetailsContainer}>
             <View style={styles.rowAndCenter}>
-
               <Text style={styles.deliveryDetailsText}>
                 <FontAwesome name="star" size={14} color={Colors.DEFAULT_YELLOW} />
                 <Text style={styles.ratingText}>{rating.toFixed(1)} </Text>
