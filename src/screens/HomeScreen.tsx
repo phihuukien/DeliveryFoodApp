@@ -7,6 +7,7 @@ import {
   ScrollView,
   FlatList,
   TouchableOpacity,
+  TextInput,
 } from 'react-native';
 import {
   CategoryMenuItem,
@@ -37,17 +38,23 @@ const HomeScreen = ({ navigation }: any) => {
   const [restaurants, setRestaurants] = useState<any[]>();
   const [activeSortItem, setActiveSortItem] = useState('recent');
   const [tags, setTags] = useState<any>();
+  const [restaurantsByRate, setRestaurantsRate] = useState<any[]>();
   useEffect(() => {
     RestaurantsService.getRestaurants().then(response => {
       if (response.status) {
         setRestaurants(response.data.data)
+        console.log("=========",response.data.data)
         dispatch(GeneralAction.setIsAppLoadingStart(100));
         dispatch(BookmarkAction.getBookmarks());
       }
     });
     TagService.getAllTags().then((response: any) => {
-      console.log(`tagg`, response);
+     
       setTags(response.data)
+    })
+
+    RestaurantsService.getRestaurantByRate().then(response =>{
+      setRestaurantsRate(response.data)
     })
 
 
@@ -85,15 +92,20 @@ const HomeScreen = ({ navigation }: any) => {
                 <Text style={styles.alertBadgeText}>12</Text>
               </View>
             </View>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("Search")}
+              >
             <View style={styles.searchContainer}>
+             
               <View style={styles.searchSection}>
                 <Ionicons
                   name="search-outline"
                   size={25}
                   color={Colors.DEFAULT_GREY}
                 />
-                <Text style={styles.searchText}>Search..</Text>
+                <Text style={styles.searchText} >Search..</Text>
               </View>
+             
               <Feather
                 name="sliders"
                 size={20}
@@ -101,6 +113,7 @@ const HomeScreen = ({ navigation }: any) => {
                 style={{ marginRight: 10 }}
               />
             </View>
+            </TouchableOpacity>
             <View style={styles.categoriesContainer}>
               {tags?.map((item: any) => (
                 <CategoryMenuItem
@@ -122,7 +135,7 @@ const HomeScreen = ({ navigation }: any) => {
                 <Text style={styles.listHeaderSubtitle}>See All</Text>
               </View>
               <FlatList
-                data={restaurants}
+                data={restaurantsByRate}
                 keyExtractor={(item: any) => item.id}
                 horizontal
                 showsHorizontalScrollIndicator={false}
@@ -149,7 +162,7 @@ const HomeScreen = ({ navigation }: any) => {
                 )
               })
             }
-            <Separator height={Display.setHeight(5)} />
+            <Separator height={Display.setHeight(15)} />
           </ScrollView>
         </View>
       }
@@ -241,7 +254,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   listContainer: {
-    paddingVertical: 5,
+    paddingVertical: 26,
     zIndex: -5,
   },
   horizontalListContainer: {

@@ -21,13 +21,15 @@ const BACKEND_API = {
   GETORDERCOMING: '/orders/getordercoming',
   GETORDERHISTORY: '/orders/getorderhistory',
   GETORDERDETAIL: '/orders/get-order-detail/',
+  GETORDERReview: '/reviews/get-order-review',
 
   ADDREVIEW:'/reviews/add',
   GETREVIEW:'/reviews/get/',
   GETREVIEWITEM:'/reviews/item/',
   GETRATING:'/reviews/rating/',
   GETALLTAGS:'/tags/getAll',
-  GETRESTAURANTBYTAG:'/restaurants/tag/'
+  GETRESTAURANTBYTAG:'/restaurants/tag/',
+  CANCEL_ORDER:'/orders/cancel-order'
 }  
 const STATIC_IMAGE = {
   BASE_URL: `${BACKEND_BASE_URL_IMG}`,

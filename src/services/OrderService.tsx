@@ -122,4 +122,66 @@ const getOrderDetail = async (orderId: string) => {
     };
   }
 };
-export default { addOrder, getOrderComing, getOrderHistory, getOrderDetail }; 
+
+const cancelOrder = async (orderCancel: any) => {
+  console.log(`OrderService | cancelOrder`);
+  try {
+    let response = await axios.post(
+      `${ApiContants.BACKEND_API.BASE_API_URL}${ApiContants.BACKEND_API.CANCEL_ORDER}`,
+      orderCancel,
+      {
+        headers: authHeader(getToken()),
+      },
+    );
+    console.log(response?.data)
+    if (response?.data.status) {
+      return {
+        status: response?.data.status,
+        message: response?.data?.Message,
+      };
+    } else {
+      return {
+        status: response?.data.status,
+        message: response?.data?.Message,
+      };
+    }
+  } catch (error) {
+    console.log(error);
+    return {
+      status: false,
+      message: `cancel Order failed exception`,
+    };
+  }
+};
+
+const getOrderToReview = async () => {
+  console.log(`OrderService | getOrderReview`);
+  try {
+    let response = await axios.get(
+      `${ApiContants.BACKEND_API.BASE_API_URL}${ApiContants.BACKEND_API.GETORDERReview}`,
+      {
+        headers: authHeader(getToken()),
+      },
+    );
+    console.log(response?.data)
+    if (response?.data.status) {
+      return {
+        status: true,
+        message: response?.data?.Message,
+        data: response?.data?.data,
+      };
+    } else {
+      return {
+        status: false,
+        message: response?.data?.Message,
+      };
+    }
+  } catch (error) {
+    console.log(error);
+    return {
+      status: false,
+      message: `GET Order HISTORY failed exception`,
+    };
+  }
+};
+export default { addOrder, getOrderComing, getOrderHistory, getOrderDetail ,cancelOrder,getOrderToReview}; 

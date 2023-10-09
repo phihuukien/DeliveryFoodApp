@@ -82,7 +82,7 @@ const SignupScreen = ({ navigation }: any) => {
             if (!response?.value.status) {
                 setErrorMessage(response.value.message);
             } else {
-                navigation.navigate('RegisterPhoneScreen');
+                navigation.navigate('SigninScreen');
                 setErrorMessage('');
                 setUsername('');
                 setPassword('');

@@ -222,6 +222,7 @@ const FoodScreen = ({ route, navigation }: any) => {
           {renderContent()}
         </View>
       </ScrollView>
+      <Separator height={Display.setHeight(10)} />
       <View style={styles.buttonsContainer}>
         <View style={styles.itemAddContainer}>
 

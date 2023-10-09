@@ -69,7 +69,7 @@ const RestaurantScreen = ({ route, navigation }: any) => {
     (state: any) =>
       state?.cartState?.cart?.find((item: any) => item?.id === restaurantId)?.count,
   );
-  
+
   const isBookmarked = useSelector(
     (state: any) =>
       state?.bookmarkState?.bookmarks?.filter(
@@ -79,12 +79,20 @@ const RestaurantScreen = ({ route, navigation }: any) => {
 
   useEffect(() => {
     RestaurantsService.getOneRestaurantById(restaurantId).then(response => {
+      console.log('====================================');
+      console.log(restaurantId);
+      console.log(response.data);
+      console.log('====================================');
       if (response.status) {
-        setSelectedCategory(response?.data?.categories[0]);
+        if (response?.data?.categories != null) {
+          setSelectedCategory(response?.data?.categories[0]);
+        }
         setRestaurant(response.data)
+       
       }
-    });;
+    });
   }, []);
+
 
   const addBookmark = () =>
     dispatch(BookmarkAction.addBookmark({ restaurantId }));
@@ -126,7 +134,10 @@ const RestaurantScreen = ({ route, navigation }: any) => {
                 size={18}
                 color={Colors.DEFAULT_YELLOW}
               />
-              <Text style={styles.ratingText}>{rate.toFixed(1)}</Text>
+              {rate > 0 ?
+                <Text style={styles.ratingText}>{rate.toFixed(1)}</Text> :
+                <Text style={styles.ratingText}>0</Text>}
+
               {review > 2 ?
                 <Text style={styles.reviewsText}>(2+ Reviews)</Text>
                 :
@@ -197,6 +208,7 @@ const RestaurantScreen = ({ route, navigation }: any) => {
                   />
                 ))}
               <Separator height={Display.setHeight(2)} />
+
             </View>
           </View>
         </ScrollView>

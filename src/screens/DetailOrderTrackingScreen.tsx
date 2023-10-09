@@ -55,6 +55,8 @@ const DetailOrderTrackingScreen = ({ route, navigation }: any) => {
         <View style={{ flexDirection: "row", alignItems: 'center', justifyContent: 'flex-end', marginBottom: 10 }} >
           <Text style={styles.amountLabelText}>{(() => {
             switch (order?.deliveringStatus) {
+              case 1:
+                return "-- Looking for driver --"
               case 2:
                 return "-- Confirmed --"
               case 3:
@@ -63,10 +65,16 @@ const DetailOrderTrackingScreen = ({ route, navigation }: any) => {
                 return "-- On The Way --"
               case 5:
                 return "-- Deliverred --"
+                case 6:
+                  return "-- Cancel --"
             }
           })()}</Text>
           {(() => {
             switch (order?.deliveringStatus) {
+              case 1:
+                return <Image
+                  style={{ borderRadius: 5, marginLeft: 5 }}
+                  source={require('../assets/images/delivery/orderPlaced.png')} />
               case 2:
                 return <Image
                   style={{ borderRadius: 5, marginLeft: 5 }}

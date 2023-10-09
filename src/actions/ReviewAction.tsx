@@ -6,7 +6,7 @@ const types = {
 
 const getREVIEW = () => {
     return (dispatch: Dispatch) => {
-        OrderService.getOrderHistory().then((response) => {
+        OrderService.getOrderToReview().then((response) => {
             if (response?.status) {
                 dispatch({
                     type: types.GET_REVIEW,

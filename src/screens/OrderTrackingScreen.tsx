@@ -24,6 +24,7 @@ import ReviewAction from '../actions/ReviewAction';
 
 const OrderTrackingScreen = ({ navigation }: any) => {
     const [cancelReason, setcancelReason] = useState('');
+    const [orderId, setOrderId] = useState('');
     const linkRealtime = config.linkRealtime;
     const dispatch = useDispatch<any>();
     const [modalVisible, setModalVisible] = useState(false);
@@ -50,6 +51,21 @@ const OrderTrackingScreen = ({ navigation }: any) => {
         };
 
     }, [])
+    const cancel=()=>{
+        let order = {
+            OrderId:orderId,
+            Reason:cancelReason
+        }
+        OrderService.cancelOrder(order).then((response:any)=>{
+            if(response.status){
+                setModalVisible(!modalVisible)
+            }
+        })
+    }
+    const openModel = (orderId:string, modelOpen:boolean)=>{
+        setModalVisible(modelOpen);
+        setOrderId(orderId);
+    }
     const orderComming = useSelector((state: any) => state?.orderState?.orderComming);
     return (
         <View style={styles.container}>
@@ -78,7 +94,7 @@ const OrderTrackingScreen = ({ navigation }: any) => {
                             selectionColor={Colors.DEFAULT_GREY}
                             style={{
                                 borderWidth: 1, padding: 3, borderRadius: 3,
-                                borderColor: Colors.DEFAULT_GREY,
+                                borderColor: Colors.DEFAULT_GREY,width:300
                             }}
                             onChangeText={text => setcancelReason(text)}
                         />
@@ -90,7 +106,7 @@ const OrderTrackingScreen = ({ navigation }: any) => {
                             </Pressable>
                             <Pressable
                                 style={[styles.button, styles.buttonCancel]}
-                                onPress={() => setModalVisible(!modalVisible)}>
+                                onPress={() => cancel()}>
                                 <Text style={styles.textStyle}>confirm cancel</Text>
                             </Pressable>
 
@@ -108,7 +124,7 @@ const OrderTrackingScreen = ({ navigation }: any) => {
                                     {...item}
                                     restaurant={item.restaurant[0]}
                                     navigate={navigation}
-                                    setModalVisible={setModalVisible}
+                                    openModel={openModel}
                                     key={item.id}
                                 />
                             ))}

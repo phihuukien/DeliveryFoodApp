@@ -52,4 +52,16 @@ const getOneRestaurantByTag = async (tagName: string) => {
         return { status: false, message: 'Oops! Something went wrong' };
     }
 }
-export default { getRestaurants, getOneRestaurantById, getOneRestaurantByTag };  
+
+const getRestaurantByRate = async () => {
+    try {
+        const url = `${BACKEND_BASE_URL}/restaurants/get-by-rate`;
+        const response = await axios.get(url);
+        return response.data;
+        
+    } catch (error) {
+        console.log(error);
+        return { status: false, message: 'Oops! Something went wrong' };
+    }
+}
+export default { getRestaurants, getOneRestaurantById, getOneRestaurantByTag,getRestaurantByRate };  

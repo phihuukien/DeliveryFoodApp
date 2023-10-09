@@ -3,7 +3,7 @@ import { Colors, Fonts } from "../contants";
 import { Display } from "../utils";
 import { StaticImageService } from "../services";
 import moment from 'moment';
-const OrderComingCard = ({setModalVisible, id,quantity,orderCode, paymentMothod, deliveringStatus, priceTotal, dateCreated, restaurant ,navigate}: any) => {
+const OrderComingCard = ({openModel, id,quantity,orderCode, paymentMothod, deliveringStatus, priceTotal, dateCreated, restaurant ,navigate}: any) => {
   const dataFormat = moment(dateCreated).format('YYYY/MM/DD -- hh:mm:ss a');
   return (
     <View style={styles.container}>
@@ -35,7 +35,7 @@ const OrderComingCard = ({setModalVisible, id,quantity,orderCode, paymentMothod,
             <Text style={styles.priceText}>$ {priceTotal} ( {quantity} mon)</Text>
             {deliveringStatus == 1 || deliveringStatus == 2 || deliveringStatus == 3?
              <TouchableOpacity activeOpacity={0.8} 
-             onPress={() => setModalVisible(true)}
+             onPress={() => openModel(id,true)}
              style={{backgroundColor:Colors.DEFAULT_RED, paddingHorizontal:10,paddingVertical:3,borderRadius:5}} >
             <Text style={{color:Colors.DEFAULT_WHITE}}>Cancel</Text>
             </TouchableOpacity>
@@ -64,6 +64,8 @@ const OrderComingCard = ({setModalVisible, id,quantity,orderCode, paymentMothod,
                   return "On The Way"
                   case 5:
                     return "Deliverred"
+                    case 6:
+                      return "Cancel"
               }
             })()}
           </Text>

@@ -1,12 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Colors, Fonts, Images } from '../contants';
 import { StaticImageService } from '../services';
 import { Display } from '../utils';
 import Feather from 'react-native-vector-icons/Feather';
 
-const DeliveryAddress = () => {
+const DeliveryAddress = ({setModalVisible,deliveryAddress,phone}:any) => {
   return (
     <View style={styles.container}>
       <View>
@@ -19,7 +19,12 @@ const DeliveryAddress = () => {
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>Deliver To : Home</Text>
           <View style={styles.rowAndCenter}>
+          <TouchableOpacity activeOpacity={0.8} 
+             onPress={() => setModalVisible(true)}
+              >
             <Text style={styles.changeText}>Change</Text>
+            </TouchableOpacity>
+          
           </View>
         </View>
         <View style={styles.textMap}>
@@ -27,7 +32,14 @@ const DeliveryAddress = () => {
             name="map-pin"
             size={10}
           />
-          <Text style={styles.tagsText}>Quốc oai, Hà Nội</Text>
+          <Text style={styles.tagsText}>{deliveryAddress}</Text>
+        </View>
+        <View style={styles.textMap}>
+          <Feather
+            name="phone"
+            size={10}
+          />
+          <Text style={styles.tagsText}>{phone}</Text>
         </View>
 
 

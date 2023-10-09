@@ -431,12 +431,6 @@ ADDED from C:\Code\ReactNative\ProjectSem4\DeliveryFoodApp\android\app\src\debug
 		ADDED from C:\Code\ReactNative\ProjectSem4\DeliveryFoodApp\android\app\src\debug\AndroidManifest.xml:16:84-108
 	android:name
 		ADDED from C:\Code\ReactNative\ProjectSem4\DeliveryFoodApp\android\app\src\debug\AndroidManifest.xml:16:19-83
-meta-data#com.google.android.geo.API_KEY
-ADDED from C:\Code\ReactNative\ProjectSem4\DeliveryFoodApp\android\app\src\main\AndroidManifest.xml:27:5-29:66
-	android:value
-		ADDED from C:\Code\ReactNative\ProjectSem4\DeliveryFoodApp\android\app\src\main\AndroidManifest.xml:29:9-64
-	android:name
-		ADDED from C:\Code\ReactNative\ProjectSem4\DeliveryFoodApp\android\app\src\main\AndroidManifest.xml:28:9-54
 uses-permission#android.permission.ACCESS_WIFI_STATE
 ADDED from [com.facebook.flipper:flipper:0.182.0] C:\Users\TUF\.gradle\caches\transforms-3\e13f88164840fe641a466d05cd8edac7\transformed\jetified-flipper-0.182.0\AndroidManifest.xml:16:5-76
 	android:name

@@ -6,14 +6,27 @@ import { StaticImageService } from '../services';
 import { Display } from '../utils';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ReviewService from '../services/ReviewService';
+import { BookmarkAction } from '../actions';
+import { useDispatch, useSelector } from 'react-redux';
 
 const RestaurantMediumCard = ({ name, images: { logo }, times, distance, tags, id, navigate }: any) => {
   const [rating, setRating] = useState(0);
+  const dispatch = useDispatch<any>();
   const [ratedOrder, setRatedOrder] = useState(Number);
+  const isBookmarked = useSelector(
+    (state: any) =>
+      state?.bookmarkState?.bookmarks?.filter((item: any) => item?.restaurantId === id)
+        ?.length > 0,
+  );
   ReviewService.getRatingRestaurant(id).then((response: any) => {
     setRating(response.avgRating);
     setRatedOrder(response.totalOrderRated);
   })
+  
+  const addBookmark = () =>
+    dispatch(BookmarkAction.addBookmark({ restaurantId: id }));
+  const removeBookmark = () =>
+    dispatch(BookmarkAction.removeBookmark({ restaurantId: id }));
   return (
     <View style={styles.container}>
       <View>
@@ -29,10 +42,13 @@ const RestaurantMediumCard = ({ name, images: { logo }, times, distance, tags, i
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>{name}</Text>
           <View style={styles.rowAndCenter}>
-            <Ionicons
-              name={'bookmark-outline'}
-              color={Colors.DEFAULT_YELLOW}
-              size={24} />
+          <Ionicons
+        color={Colors.DEFAULT_YELLOW}
+        size={24}
+        style={styles.bookmark}
+        name={isBookmarked ? 'bookmark' : 'bookmark-outline'}
+        onPress={() => (isBookmarked ? removeBookmark() : addBookmark())}
+      />
           </View>
         </View>
         <Text style={styles.tagsText}>{tags?.join(' • ')}</Text>
@@ -65,6 +81,12 @@ const RestaurantMediumCard = ({ name, images: { logo }, times, distance, tags, i
 };
 
 const styles = StyleSheet.create({
+  bookmark: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    zIndex: 10,
+  },
   container: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -125,6 +147,7 @@ const styles = StyleSheet.create({
   },
   ratingText: {
     marginLeft: 5,
+    marginRight: 5,
     fontSize: 10,
     lineHeight: 10 * 1.4,
     fontFamily: Fonts.POPPINS_BOLD,

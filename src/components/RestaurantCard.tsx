@@ -11,12 +11,13 @@ import ReviewService from '../services/ReviewService';
 const RestaurantCard = ({
   id,
   name,
-  images: { poster },
+  image,
   tags,
   distance,
   times,
   navigate,
 }: any) => {
+  
   const dispatch = useDispatch<any>();
   const isBookmarked = useSelector(
     (state: any) =>
@@ -48,7 +49,7 @@ const RestaurantCard = ({
         onPress={() => (isBookmarked ? removeBookmark() : addBookmark())}
       />
       <Image
-        source={{ uri: StaticImageService.getPoster(poster) }}
+        source={{ uri: StaticImageService.getPoster(image.poster) }}
         style={styles.posterStyle}
       />
       <Text style={styles.titleText}>{name}</Text>

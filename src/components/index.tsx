@@ -13,6 +13,7 @@ import FoodCheckoutCard from "./FoodCheckoutCard";
 import FocusAwareStatusBar from "./FocusAwareStatusBar";
 import OrderCard from "./OrderCard";
 import OrderComingCard from "./OrderComingCard";
+import SearchItem from "./SearchItem";
 export {
     WelcomeCard,
     Separator,
@@ -28,5 +29,6 @@ export {
     FoodCheckoutCard,
     FocusAwareStatusBar,
     OrderCard,
-    OrderComingCard
+    OrderComingCard,
+    SearchItem,
 }
