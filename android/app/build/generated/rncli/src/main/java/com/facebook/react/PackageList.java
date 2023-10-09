@@ -15,16 +15,28 @@ import java.util.ArrayList;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 // lottie-react-native
 import com.airbnb.android.react.lottie.LottiePackage;
+// react-native-image-crop-picker
+import com.reactnative.ivpusic.imagepicker.PickerPackage;
+// react-native-image-picker
+import com.imagepicker.ImagePickerPackage;
 // react-native-maps
 import com.rnmaps.maps.MapsPackage;
 // react-native-pager-view
 import com.reactnativepagerview.PagerViewPackage;
+// react-native-permissions
+import com.zoontek.rnpermissions.RNPermissionsPackage;
 // react-native-safe-area-context
 import com.th3rdwave.safeareacontext.SafeAreaContextPackage;
 // react-native-screens
 import com.swmansion.rnscreens.RNScreensPackage;
+// react-native-svg
+import com.horcrux.svg.SvgPackage;
 // react-native-vector-icons
 import com.oblador.vectoricons.VectorIconsPackage;
+// react-native-webview
+import com.reactnativecommunity.webview.RNCWebViewPackage;
+// react-native-image-base64
+import fr.snapp.imagebase64.RNImgToBase64Package;
 
 public class PackageList {
   private Application application;
@@ -72,11 +84,17 @@ public class PackageList {
       new MainReactPackage(mConfig),
       new AsyncStoragePackage(),
       new LottiePackage(),
+      new PickerPackage(),
+      new ImagePickerPackage(),
       new MapsPackage(),
       new PagerViewPackage(),
+      new RNPermissionsPackage(),
       new SafeAreaContextPackage(),
       new RNScreensPackage(),
-      new VectorIconsPackage()
+      new SvgPackage(),
+      new VectorIconsPackage(),
+      new RNCWebViewPackage(),
+      new RNImgToBase64Package()
     ));
   }
 }

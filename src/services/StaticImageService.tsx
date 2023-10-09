@@ -1,4 +1,4 @@
-import {ApiContants} from '../contants';
+import { ApiContants } from '../contants';
 
 const getFlagIcon = (
   code = 'VN',
@@ -6,17 +6,20 @@ const getFlagIcon = (
   size = ApiContants.COUNTRY_FLAG.SIZE[64],
 ) => `${ApiContants.COUNTRY_FLAG.BASE_URL}/${code}/${style}/${size}.png`;
 
-const getPoster = (imageId:string) =>
+const getPoster = (imageId: string) =>
   `${ApiContants.STATIC_IMAGE.BASE_URL}/poster/${imageId}.png`;
-  
-const getLogo =  (imageId:string) =>`${ApiContants.STATIC_IMAGE.BASE_URL}/logo/${imageId}.png`;
-const getGalleryImage = 
-  (imageId:string,
-  size:string,
-) =>
-  `${ApiContants.STATIC_IMAGE.BASE_URL}/gallery/${size}/${imageId}.png`;
 
+const getLogo = (imageId: string) => `${ApiContants.STATIC_IMAGE.BASE_URL}/logo/${imageId}.png`;
+const getLogoTag = (imageId: string) => `${ApiContants.STATIC_IMAGE.BASE_URL}/logo/${imageId}`;
+const getGalleryImage =
+  (imageId: string,
+    size: string,
+  ) =>
+    `${ApiContants.STATIC_IMAGE.BASE_URL}/gallery/${size}/${imageId}.png`;
+
+const getReviewImg = (imageId: string) =>
+  `${ApiContants.STATIC_IMAGE.BASE_URL}/reviews/${imageId}`
 // const getFlagIcon = (
 //   code = 'VN',
 // ) => `${code}.png`;
-export default {getFlagIcon,getPoster,getLogo,getGalleryImage};
+export default { getFlagIcon, getPoster, getLogo, getGalleryImage, getReviewImg,getLogoTag };

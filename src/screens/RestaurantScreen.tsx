@@ -16,8 +16,7 @@ import { Display } from '../utils';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useDispatch, useSelector } from 'react-redux';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import { BookmarkAction, CartAction } from '../actions';
+import { BookmarkAction } from '../actions';
 
 const ListHeader = () => (
   <View
@@ -58,17 +57,19 @@ const ListFooter = () => (
 
 
 const RestaurantScreen = ({ route, navigation }: any) => {
-  const { restaurantId } = route.params;
+  const { restaurantId, rate, review } = route.params;
   const [restaurant, setRestaurant] = useState<any>();
   const [selectedCategory, setSelectedCategory] = useState(null);
   const dispatch = useDispatch<any>();
 
+
   // const cart = useSelector((state: any) => state?.cartState?.cart);
+
   const itemCount = useSelector(
     (state: any) =>
-      state?.cartState?.cart?.find((item: any) => item?.id === restaurantId)
-        ?.count,
+      state?.cartState?.cart?.find((item: any) => item?.id === restaurantId)?.count,
   );
+
   const isBookmarked = useSelector(
     (state: any) =>
       state?.bookmarkState?.bookmarks?.filter(
@@ -78,12 +79,20 @@ const RestaurantScreen = ({ route, navigation }: any) => {
 
   useEffect(() => {
     RestaurantsService.getOneRestaurantById(restaurantId).then(response => {
+      console.log('====================================');
+      console.log(restaurantId);
+      console.log(response.data);
+      console.log('====================================');
       if (response.status) {
-        setSelectedCategory(response?.data?.categories[0]);
+        if (response?.data?.categories != null) {
+          setSelectedCategory(response?.data?.categories[0]);
+        }
         setRestaurant(response.data)
+       
       }
     });
   }, []);
+
 
   const addBookmark = () =>
     dispatch(BookmarkAction.addBookmark({ restaurantId }));
@@ -125,8 +134,16 @@ const RestaurantScreen = ({ route, navigation }: any) => {
                 size={18}
                 color={Colors.DEFAULT_YELLOW}
               />
-              <Text style={styles.ratingText}>4.2</Text>
-              <Text style={styles.reviewsText}>(455 Reviews)</Text>
+              {rate > 0 ?
+                <Text style={styles.ratingText}>{rate.toFixed(1)}</Text> :
+                <Text style={styles.ratingText}>0</Text>}
+
+              {review > 2 ?
+                <Text style={styles.reviewsText}>(2+ Reviews)</Text>
+                :
+                <Text style={styles.reviewsText}>({review} Reviews)</Text>
+              }
+              {/* <Text style={styles.reviewsText}>({review} Reviews)</Text> */}
             </View>
             <View style={styles.deliveryDetailsContainer}>
               <View style={styles.rowAndCenter}>
@@ -191,6 +208,7 @@ const RestaurantScreen = ({ route, navigation }: any) => {
                   />
                 ))}
               <Separator height={Display.setHeight(2)} />
+
             </View>
           </View>
         </ScrollView>
@@ -201,7 +219,7 @@ const RestaurantScreen = ({ route, navigation }: any) => {
           <View style={styles.buttonsContainer}>
             <TouchableOpacity
               style={styles.cartButton}
-              onPress={() => navigation.navigate('CartScreen',{restaurantId:restaurantId})}
+              onPress={() => navigation.navigate('CartScreen', { restaurantId: restaurantId })}
               activeOpacity={0.8}>
               <Ionicons name="cart" size={30}
                 style={{ color: 'white' }}
@@ -211,6 +229,7 @@ const RestaurantScreen = ({ route, navigation }: any) => {
           </View>
         </>
       ) : null}
+
       <Ionicons
         style={{ position: 'absolute', color: 'white', zIndex: 100, top: 50 }}
         name="chevron-back-outline"

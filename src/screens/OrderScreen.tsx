@@ -22,7 +22,7 @@ const OrderScreen = ({ navigation }: any) => {
         backgroundColor={Colors.DEFAULT_GREEN}
         translucent
       />
-
+  <Separator height={Display.setHeight(6)} />
       {cart?.length > 0 ? (
         <>
           <ScrollView>
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   foodList: {
-    marginHorizontal: 70,
+    marginHorizontal: 10,
   },
   emptyCartContainer: {
     flex: 1,

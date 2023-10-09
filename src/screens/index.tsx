@@ -2,9 +2,9 @@ import SplashScreen from './SplashScreen';
 import WelcomeScreen from './WelcomeScreen';
 import SigninScreen from './SigninScreen';
 import SignupScreen from './SignupScreen';
-import ForgotPasswordScreen from './ForgotPasswordScreen ';
-import RegisterPhoneScreen from './RegisterPhoneScreen ';
-import VerificationScreen from './VerificationScreen ';
+import ForgotPasswordScreen from './ForgotPasswordScreen';
+import RegisterPhoneScreen from './RegisterPhoneScreen';
+import VerificationScreen from './VerificationScreen';
 import HomeScreen from './HomeScreen';
 import RestaurantScreen from './RestaurantScreen';
 import FoodScreen from './FoodScreen';
@@ -17,6 +17,9 @@ import OrderTrackingScreen from './OrderTrackingScreen';
 import HistoryOrderScreen from './HistoryOrderScreen';
 import LoadingStartScreen from './LoadingStartScreen';
 import SuccessOrder from './SuccessOrder';
+import ReviewScreen from './ReviewScreen';
+import ReviewActionScreen from './ReviewActionScreen';
+import RestaurantsByTagScreen from './RestaurantsByTagScreen';
 import ResultSearch  from './ResultSearch';
 import Search from './Search';
 export {
@@ -39,7 +42,9 @@ export {
     HistoryOrderScreen,
     LoadingStartScreen,
     SuccessOrder,
+    ReviewScreen,
+    ReviewActionScreen,
+    RestaurantsByTagScreen,
     ResultSearch,
     Search
-
 };

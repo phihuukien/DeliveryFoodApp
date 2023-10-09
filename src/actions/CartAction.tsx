@@ -1,5 +1,4 @@
-import {CartService, StorageService} from '../services';
-import CartAction from './CartAction';
+import {CartService} from '../services';
 import { Dispatch } from "redux";
 
 const types = {

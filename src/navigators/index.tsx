@@ -14,6 +14,7 @@ import {
   RegisterPhoneScreen,
   RestaurantScreen,
   Search,
+  RestaurantsByTagScreen,
   SigninScreen,
   SignupScreen,
   SplashScreen,
@@ -28,6 +29,8 @@ import { AnyAction } from "redux";
 import HomeTabs from './BottomTabs';
 import OrderTabs from './TopTabs';
 import DetailOrderTrackingScreen from "../screens/DetailOrderTrackingScreen";
+import ReviewScreen from "../screens/ReviewScreen";
+import ReviewActionScreen from "../screens/ReviewActionScreen";
 const Stack = createNativeStackNavigator();
 
 const Navigators = () => {
@@ -71,6 +74,9 @@ const Navigators = () => {
             <Stack.Screen name="DetailOrderTrackingScreen" component={DetailOrderTrackingScreen} />
             <Stack.Screen name="Search" component={Search} />
             <Stack.Screen name="ResultSearch" component={ResultSearch} />
+            <Stack.Screen name="Review" component={ReviewScreen} />
+            <Stack.Screen name="ReviewAction" component={ReviewActionScreen} />
+            <Stack.Screen name="RestaurantsByTag" component={RestaurantsByTagScreen} />
           </>
         )}
       </Stack.Navigator>

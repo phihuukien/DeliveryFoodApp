@@ -25,6 +25,7 @@ import { RestaurantsService } from '../services';
 import LoadingStartScreen from './LoadingStartScreen';
 import { useDispatch } from 'react-redux';
 import { BookmarkAction, GeneralAction } from '../actions';
+import TagService from '../services/TagService';
 
 const sortStyle = (isActive: boolean) =>
   isActive
@@ -36,15 +37,26 @@ const HomeScreen = ({ navigation }: any) => {
   const [activeCategory, setActiveCategory] = useState();
   const [restaurants, setRestaurants] = useState<any[]>();
   const [activeSortItem, setActiveSortItem] = useState('recent');
-
+  const [tags, setTags] = useState<any>();
+  const [restaurantsByRate, setRestaurantsRate] = useState<any[]>();
   useEffect(() => {
     RestaurantsService.getRestaurants().then(response => {
       if (response.status) {
         setRestaurants(response.data.data)
+        console.log("=========",response.data.data)
         dispatch(GeneralAction.setIsAppLoadingStart(100));
         dispatch(BookmarkAction.getBookmarks());
       }
-    });;
+    });
+    TagService.getAllTags().then((response: any) => {
+     
+      setTags(response.data)
+    })
+
+    RestaurantsService.getRestaurantByRate().then(response =>{
+      setRestaurantsRate(response.data)
+    })
+
 
   }, []);
 
@@ -103,13 +115,15 @@ const HomeScreen = ({ navigation }: any) => {
             </View>
             </TouchableOpacity>
             <View style={styles.categoriesContainer}>
-              {Mock.CATEGORIES.map(({ name, logo }) => (
+              {tags?.map((item: any) => (
                 <CategoryMenuItem
-                  key={name}
-                  name={name}
-                  logo={logo}
+                  {...item}
+                  key={item.id}
                   activeCategory={activeCategory}
                   setActiveCategory={setActiveCategory}
+                  navigate={() =>
+                    navigation.navigate("RestaurantsByTag", { tagName: item?.name })
+                  }
                 />
               ))}
             </View>
@@ -121,7 +135,7 @@ const HomeScreen = ({ navigation }: any) => {
                 <Text style={styles.listHeaderSubtitle}>See All</Text>
               </View>
               <FlatList
-                data={restaurants}
+                data={restaurantsByRate}
                 keyExtractor={(item: any) => item.id}
                 horizontal
                 showsHorizontalScrollIndicator={false}
@@ -131,53 +145,24 @@ const HomeScreen = ({ navigation }: any) => {
                 renderItem={({ item }: any) => (
                   <RestaurantCard
                     {...item}
-                    navigate={(restaurantId: any) =>
-                      navigation.navigate('RestaurantScreen', { restaurantId: restaurantId })
-                    }
+                    navigate={navigation}
                   />
                 )}
               />
             </View>
             <View style={styles.sortListContainer}>
-              <TouchableOpacity
-                style={sortStyle(activeSortItem === 'recent')}
-                activeOpacity={0.8}
-                onPress={() => setActiveSortItem("recent")}>
-                <Text style={styles.sortListItemText}>Recent</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={sortStyle(activeSortItem === 'favorite')}
-                activeOpacity={0.8}
-                onPress={() => setActiveSortItem("favorite")}>
-                <Text style={styles.sortListItemText}>Favorite</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={sortStyle(activeSortItem === 'rating')}
-                activeOpacity={0.8}
-                onPress={() => setActiveSortItem("rating")}>
-                <Text style={styles.sortListItemText}>Rating</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={sortStyle(activeSortItem === 'popular')}
-                activeOpacity={0.8}
-                onPress={() => setActiveSortItem("popular")}>
-                <Text style={styles.sortListItemText}>Popular</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={sortStyle(activeSortItem === 'trending')}
-                activeOpacity={0.8}
-                onPress={() => setActiveSortItem("trending")}>
-                <Text style={styles.sortListItemText}>Trending</Text>
-              </TouchableOpacity>
+              <Text style={styles.sortListItemText}></Text>
             </View>
             {
               restaurants?.map((item) => {
                 return (
-                  <RestaurantMediumCard {...item} key={item?.id} />
+                  <RestaurantMediumCard {...item} key={item?.id}
+                    navigate={navigation}
+                  />
                 )
               })
             }
-            <Separator height={Display.setHeight(5)} />
+            <Separator height={Display.setHeight(15)} />
           </ScrollView>
         </View>
       }

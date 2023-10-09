@@ -30,12 +30,7 @@ const SearchItem = ({
                 <View style={styles.labelContainer}>
                     <View style={styles.titleContainer}>
                         <Text style={styles.titleText}>{restaurant.name}</Text>
-                        <View style={styles.rowAndCenter}>
-                            <Ionicons
-                                name={'bookmark-outline'}
-                                color={Colors.DEFAULT_YELLOW}
-                                size={24} />
-                        </View>
+                       
                     </View>
                     <Text style={styles.tagsText}>{name}</Text>
                     <View style={styles.deliveryDetailsContainer}>

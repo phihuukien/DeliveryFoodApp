@@ -8,6 +8,9 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
+  TextInput,
+  Modal,
+  Pressable,
 } from 'react-native';
 import { Colors, Fonts, Images } from '../contants';
 import { DeliveryAddress, FoodCard, FoodCheckoutCard, Separator } from '../components';
@@ -22,45 +25,60 @@ import OrderAction from '../actions/OrderAction';
 
 const CheckoutScreen = ({ route, navigation }: any) => {
   const dispatch = useDispatch<any>();
-  const { restaurantId ,grandTotal,itemTotal} = route.params;
+  const { restaurantId, grandTotal, itemTotal } = route.params;
   const cart = useSelector((state: any) => state?.cartState?.cartDetail);
-  
+
   const userData = useSelector(
     (state: any) => state?.generalState?.userData,
   );
+
   const arrayCart: { foodId: any; count: any; }[] = [];
   const [deliveryAddress, setDeliveryAddress] = useState('');
   const [note, setNote] = useState('');
+  const [phone, setPhone] = useState<any>();
   const [paymentMothod, setPaymentMothod] = useState(1);
+  const [modalVisible, setModalVisible] = useState(false);
+  // const [activePayment, setActivePayment] = useState();
 
-  cart?.cartItems?.filter((item:any)=>item?.food[0]?.restaurantId === restaurantId).map((item: any) => {
+  cart?.cartItems?.filter((item: any) => item?.food[0]?.restaurantId === restaurantId).map((item: any) => {
     arrayCart?.push({ "foodId": item.foodId, "count": item.count });
   }
   )
+  if (userData.phone) {
+    const ph = userData.phone
+  }
+  const activePayment = (isActive: Boolean) => {
+    if (isActive) {
+      setPaymentMothod(1);
+    } else {
+      setPaymentMothod(2);
+    }
+  }
 
+  console.log(note)
   const addOrder = () => {
     let order = {
       CartOrder: arrayCart,
       Quantity: itemTotal,
-      DeliveryAddress: "ha noi, Viet Nam",
+      DeliveryAddress: deliveryAddress,
       Note: note,
       paymentMothod: paymentMothod,
-      restaurantId:restaurantId,
-      phoneAddress:"0182424343",
+      restaurantId: restaurantId,
+      phoneAddress: phone,
       priceTotal: grandTotal,
       username: userData.username,
-     
+
     };
 
-    OrderService.addOrder(order).then((response)=>{
-        if(response?.status){
-          dispatch(CartAction.getCartItemsdDetailSetReduer());
-          dispatch(CartAction.getCartItemsSetReduer());
-          dispatch(OrderAction.getOrderComing());
-          navigation.navigate("SuccessOrder");
-        }else{
-          console.log(response.message)
-        }
+    OrderService.addOrder(order).then((response) => {
+      if (response?.status) {
+        dispatch(CartAction.getCartItemsdDetailSetReduer());
+        dispatch(CartAction.getCartItemsSetReduer());
+        dispatch(OrderAction.getOrderComing());
+        navigation.navigate("SuccessOrder");
+      } else {
+        console.log(response.message)
+      }
     })
 
   }
@@ -72,6 +90,50 @@ const CheckoutScreen = ({ route, navigation }: any) => {
         translucent
       />
       <Separator height={StatusBar.currentHeight} />
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Delivery Information</Text>
+
+            <TextInput
+              placeholder="Delivery Address"
+              placeholderTextColor={Colors.DEFAULT_GREY}
+              selectionColor={Colors.DEFAULT_GREY}
+              style={{
+                borderWidth: 1, padding: 3, borderRadius: 3,
+                borderColor: Colors.DEFAULT_GREY, width: 300
+              }}
+              value={deliveryAddress}
+              onChangeText={text => setDeliveryAddress(text)}
+
+            />
+            <TextInput
+              placeholder="Phone "
+              placeholderTextColor={Colors.DEFAULT_GREY}
+              selectionColor={Colors.DEFAULT_GREY}
+              style={{
+                borderWidth: 1, padding: 3, borderRadius: 3,
+                borderColor: Colors.DEFAULT_GREY, width: 300, marginTop: 20
+              }}
+              value={phone}
+              onChangeText={text => setPhone(text)}
+
+            />
+            <View style={{ flexDirection: 'row', marginTop: 10 }}>
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => setModalVisible(!modalVisible)}>
+                <Text style={styles.textStyle}>Confirm</Text>
+              </Pressable>
+            </View>
+
+          </View>
+        </View>
+      </Modal>
       <View style={styles.headerContainer}>
         <Ionicons
           name="chevron-back-outline"
@@ -81,7 +143,9 @@ const CheckoutScreen = ({ route, navigation }: any) => {
         <Text style={styles.headerTitle}>Checkout</Text>
       </View>
       <ScrollView>
-        <DeliveryAddress />
+        <DeliveryAddress setModalVisible={setModalVisible}
+          deliveryAddress={deliveryAddress}
+          phone={phone} />
         <View style={styles.foodList}>
 
           {cart?.cartItems?.filter((item: any) => item?.food[0].restaurantId === restaurantId)
@@ -95,14 +159,18 @@ const CheckoutScreen = ({ route, navigation }: any) => {
         </View>
         <View style={styles.promoCodeContainer}>
           <View style={styles.rowAndCenter}>
-            <Entypo name="ticket" size={30} color={Colors.DEFAULT_YELLOW} />
-            <Text style={styles.promoCodeText}>Add Promo Code</Text>
+            {/* <Entypo name="ticket" size={30} color={Colors.DEFAULT_YELLOW} />*/}
+            <Text style={styles.promoCodeText}>Note: </Text>
+            <TextInput
+              placeholder="note ..."
+              placeholderTextColor={Colors.DEFAULT_GREY}
+              selectionColor={Colors.DEFAULT_GREY}
+              style={styles.inputText}
+              onChangeText={text => setNote(text)}
+
+            />
           </View>
-          <Ionicons
-            name="chevron-forward-outline"
-            size={20}
-            color={Colors.DEFAULT_BLACK}
-          />
+
         </View>
         <View style={styles.amountContainer}>
           <View style={styles.amountSubContainer}>
@@ -131,11 +199,25 @@ const CheckoutScreen = ({ route, navigation }: any) => {
             $ {grandTotal.toFixed(2)}
           </Text>
         </View>
+        <View style={[styles.totalContainer]}>
+          <Pressable onPress={()=>activePayment(true)}>
+            <Text style={[styles.totalText, styles.payment, { opacity: paymentMothod  === 1 ? 1 : 0.3  }]}>payment forward</Text>
+          </Pressable>
+          <Pressable  onPress={()=>activePayment(false)}>
+            <Text style={[styles.totalText, styles.payment, { opacity: paymentMothod  === 2 ? 1 : 0.3  }]}>
+              payment in advance
+            </Text>
+          </Pressable>
+
+
+
+
+        </View>
         <TouchableOpacity style={styles.checkoutButton}
           onPress={() => addOrder()}
         >
           <View >
-            <Text style={styles.checkoutText}>Conform order</Text>
+            <Text style={styles.checkoutText}>Confirm order</Text>
           </View>
 
         </TouchableOpacity>
@@ -147,6 +229,73 @@ const CheckoutScreen = ({ route, navigation }: any) => {
 };
 
 const styles = StyleSheet.create({
+  isActived1: {
+    borderColor: Colors.DEFAULT_GREEN,
+  },
+  isActived2: {
+    borderColor: Colors.DEFAULT_GREY,
+  },
+  payment: {
+    borderColor: Colors.DEFAULT_GREEN,
+    borderWidth: 1,
+    width: '100%',
+    paddingVertical: 10,
+    fontSize: 15,
+    paddingHorizontal: 10,
+    marginLeft: 5
+  },
+  buttonClose: {
+    backgroundColor: Colors.DEFAULT_GREEN,
+  },
+  buttonCancel: {
+    backgroundColor: Colors.DEFAULT_RED,
+    marginLeft: 20
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 10,
+    padding: 10,
+    elevation: 2,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 0,
+    height: '250%',
+    backgroundColor: 'rgba(52, 52, 52, 0.8)'
+  },
+  inputText: {
+    fontSize: 18,
+    textAlignVertical: 'center',
+    padding: 0,
+    height: Display.setHeight(6),
+    color: Colors.DEFAULT_BLACK,
+    flex: 1,
+  },
   container: {
     flex: 1,
     backgroundColor: Colors.DEFAULT_WHITE,
@@ -171,7 +320,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginHorizontal: Display.setWidth(4),
-    paddingVertical: 15,
+    paddingVertical: 5,
     marginTop: 10,
     borderTopWidth: 0.5,
     borderBottomWidth: 0.5,

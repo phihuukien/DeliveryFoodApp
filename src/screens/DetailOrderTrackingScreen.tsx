@@ -13,14 +13,15 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { OrderService } from '../services';
-import Separator from '../components/Separator ';
 import Colors from '../contants/Colors';
 import moment from 'moment';
 import { Display } from '../utils';
 import FoodOrderCard from '../components/FoodOrderCard';
+import { Separator } from '../components';
 
 const DetailOrderTrackingScreen = ({ route, navigation }: any) => {
   const { orderId } = route.params;
+ 
   const [order, setOrder] = useState<any>()
   const [orderDetail, setOrderDetail] = useState<any>()
   useEffect(() => {
@@ -28,6 +29,7 @@ const DetailOrderTrackingScreen = ({ route, navigation }: any) => {
       if (response.status) {
         setOrderDetail(response.orderDetail)
         setOrder(response.data)
+        console.log(`deliver status`,response.data);
       }
     })
   }, [])
@@ -53,18 +55,26 @@ const DetailOrderTrackingScreen = ({ route, navigation }: any) => {
         <View style={{ flexDirection: "row", alignItems: 'center', justifyContent: 'flex-end', marginBottom: 10 }} >
           <Text style={styles.amountLabelText}>{(() => {
             switch (order?.deliveringStatus) {
+              case 1:
+                return "-- Looking for driver --"
               case 2:
                 return "-- Confirmed --"
               case 3:
                 return "-- Order processing --"
               case 4:
-                return "-- On Thy Way --"
+                return "-- On The Way --"
               case 5:
                 return "-- Deliverred --"
+                case 6:
+                  return "-- Cancel --"
             }
           })()}</Text>
           {(() => {
             switch (order?.deliveringStatus) {
+              case 1:
+                return <Image
+                  style={{ borderRadius: 5, marginLeft: 5 }}
+                  source={require('../assets/images/delivery/orderPlaced.png')} />
               case 2:
                 return <Image
                   style={{ borderRadius: 5, marginLeft: 5 }}

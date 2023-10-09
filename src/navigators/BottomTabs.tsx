@@ -3,7 +3,8 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {
     AccountScreen,
     BookmarkScreen,
-  HomeScreen,
+  HomeScreen
+
 } from '../screens';
 import OrderTabs from './TopTabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';

@@ -1,9 +1,9 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Button, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Colors, Fonts } from "../contants";
 import { Display } from "../utils";
 import { StaticImageService } from "../services";
 import moment from 'moment';
-const OrderComingCard = ({setModalVisible, id,quantity,orderCode, paymentMothod, deliveringStatus, priceTotal, dateCreated, restaurant ,navigate}: any) => {
+const OrderComingCard = ({openModel, id,quantity,orderCode, paymentMothod, deliveringStatus, priceTotal, dateCreated, restaurant ,navigate}: any) => {
   const dataFormat = moment(dateCreated).format('YYYY/MM/DD -- hh:mm:ss a');
   return (
     <View style={styles.container}>
@@ -18,6 +18,7 @@ const OrderComingCard = ({setModalVisible, id,quantity,orderCode, paymentMothod,
         onPress={()=> navigate.navigate("DetailOrderTrackingScreen",{orderId:id})}>
           <Image
             style={styles.image}
+           
             source={{ uri: StaticImageService.getPoster(restaurant.images.poster) }}
           />
         </TouchableOpacity>
@@ -34,7 +35,7 @@ const OrderComingCard = ({setModalVisible, id,quantity,orderCode, paymentMothod,
             <Text style={styles.priceText}>$ {priceTotal} ( {quantity} mon)</Text>
             {deliveringStatus == 1 || deliveringStatus == 2 || deliveringStatus == 3?
              <TouchableOpacity activeOpacity={0.8} 
-             onPress={() => setModalVisible(true)}
+             onPress={() => openModel(id,true)}
              style={{backgroundColor:Colors.DEFAULT_RED, paddingHorizontal:10,paddingVertical:3,borderRadius:5}} >
             <Text style={{color:Colors.DEFAULT_WHITE}}>Cancel</Text>
             </TouchableOpacity>
@@ -42,6 +43,7 @@ const OrderComingCard = ({setModalVisible, id,quantity,orderCode, paymentMothod,
             <></>}
            
           </View>
+
         </View>
       </View>
       <View style={styles.statusFooter}>
@@ -59,9 +61,11 @@ const OrderComingCard = ({setModalVisible, id,quantity,orderCode, paymentMothod,
                 case 3:
                   return "Order Processing"
                 case 4:
-                  return "On Thy Way"
+                  return "On The Way"
                   case 5:
                     return "Deliverred"
+                    case 6:
+                      return "Cancel"
               }
             })()}
           </Text>
@@ -90,7 +94,6 @@ const styles = StyleSheet.create({
     marginVertical: 4
   },
   textFooter: {
-
   },
   subcontainer: {
     flexDirection: 'row',
@@ -134,7 +137,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginHorizontal: 5,
+    // marginHorizontal: 5,
   },
   itemAddContainer: {
     flexDirection: 'row',
